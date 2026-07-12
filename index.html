@@ -156,34 +156,8 @@
     height: auto;
     border-radius: 4px;
   }
-
-  .steps-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
-  }
-  .step-card {
-    text-align: center;
-  }
-  .step-card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-    border: 1px solid var(--border);
-    background: #fff;
-  }
-  .step-card .step-num {
-    display: inline-block;
-    margin-top: 0.4rem;
-    font-size: 0.75rem;
-    font-variant-numeric: tabular-nums;
-    color: var(--text-sub);
-  }
-  .step-card .step-kind {
-    display: block;
-    font-size: 0.8rem;
-    color: var(--text);
-    margin-top: 0.15rem;
+  .content-block .img-wrap.cp img {
+    max-width: 320px;
   }
 
   .legend {
@@ -258,86 +232,15 @@
 
   <div class="content-block">
     <h3>展開図</h3>
-    <div class="img-wrap">
+    <div class="img-wrap cp">
       <img src="crease_patterns/crane.png" alt="鶴の展開図">
-    </div>
-  </div>
-
-  <div class="content-block">
-    <h3>折り順（展開図 → 完成形）</h3>
-    <div class="steps-grid">
-      <div class="step-card">
-        <img src="steps/crane/1.png" alt="ステップ1">
-        <span class="step-num">1</span>
-        <span class="step-kind">山折り・谷折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/2.png" alt="ステップ2">
-        <span class="step-num">2</span>
-        <span class="step-kind">四角形へのつぶし折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/3.png" alt="ステップ3">
-        <span class="step-num">3</span>
-        <span class="step-kind">四角形へのつぶし折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/4.png" alt="ステップ4">
-        <span class="step-num">4</span>
-        <span class="step-kind">花弁折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/5.png" alt="ステップ5">
-        <span class="step-num">5</span>
-        <span class="step-kind">花弁折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/6.png" alt="ステップ6">
-        <span class="step-num">6</span>
-        <span class="step-kind">山折り・谷折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/7.png" alt="ステップ7">
-        <span class="step-num">7</span>
-        <span class="step-kind">中割り折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/8.png" alt="ステップ8">
-        <span class="step-num">8</span>
-        <span class="step-kind">中割り折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/9.png" alt="ステップ9">
-        <span class="step-num">9</span>
-        <span class="step-kind">中割り折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/10.png" alt="ステップ10">
-        <span class="step-num">10</span>
-        <span class="step-kind">山折り・谷折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/11.png" alt="ステップ11">
-        <span class="step-num">11</span>
-        <span class="step-kind">四角形へのつぶし折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/12.png" alt="ステップ12">
-        <span class="step-num">12</span>
-        <span class="step-kind">山折り・谷折り</span>
-      </div>
-      <div class="step-card">
-        <img src="steps/crane/complete.png" alt="完成形">
-        <span class="step-num"></span>
-        <span class="step-kind" style="color: var(--accent); font-weight: 600;">完成形</span>
-      </div>
     </div>
   </div>
 
   <div class="content-block">
     <h3>折り順一覧</h3>
     <div class="img-wrap">
-      <img src="steps/crane/fold.png" alt="鶴の折り順一覧">
+      <img src="steps/crane_fold.png" alt="鶴の折り順一覧">
     </div>
   </div>
 
