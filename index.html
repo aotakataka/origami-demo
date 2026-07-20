@@ -1,34 +1,25 @@
-<title>折り紙の折り順自動生成 — デモ</title>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>折り紙の折り順自動生成 — デモ</title>
 <style>
+:root {
+  --bg: #F7F5F0;
+  --bg-card: #FFFFFF;
+  --text: #2A2A2A;
+  --text-sub: #6B6560;
+  --border: #D8D3CC;
+  --accent: #B8963E;
+  --mountain: #C84B4B;
+  --valley: #4B7EC8;
+  --fold-line: #C84B4B;
+  --back-green: #B4E5A2;
+  --shadow: rgba(58, 50, 40, 0.08);
+}
+@media (prefers-color-scheme: dark) {
   :root {
-    --bg: #F7F5F0;
-    --bg-card: #FFFFFF;
-    --text: #2A2A2A;
-    --text-sub: #6B6560;
-    --border: #D8D3CC;
-    --accent: #B8963E;
-    --mountain: #C84B4B;
-    --valley: #4B7EC8;
-    --back-green: #8BBF7A;
-    --shadow: rgba(58, 50, 40, 0.08);
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #1C1B19;
-      --bg-card: #26251F;
-      --text: #E8E4DC;
-      --text-sub: #9E978E;
-      --border: #3E3B34;
-      --accent: #D4AE4E;
-      --mountain: #E06060;
-      --valley: #6A9EE0;
-      --back-green: #7DAF6A;
-      --shadow: rgba(0, 0, 0, 0.3);
-    }
-  }
-  :root[data-theme="dark"] {
     --bg: #1C1B19;
     --bg-card: #26251F;
     --text: #E8E4DC;
@@ -37,597 +28,372 @@
     --accent: #D4AE4E;
     --mountain: #E06060;
     --valley: #6A9EE0;
+    --fold-line: #E06060;
     --back-green: #7DAF6A;
     --shadow: rgba(0, 0, 0, 0.3);
   }
-  :root[data-theme="light"] {
-    --bg: #F7F5F0;
-    --bg-card: #FFFFFF;
-    --text: #2A2A2A;
-    --text-sub: #6B6560;
-    --border: #D8D3CC;
-    --accent: #B8963E;
-    --mountain: #C84B4B;
-    --valley: #4B7EC8;
-    --back-green: #8BBF7A;
-    --shadow: rgba(58, 50, 40, 0.08);
-  }
+}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    font-family: "Hiragino Kaku Gothic ProN", "Meiryo", "Noto Sans JP", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.7;
-    -webkit-font-smoothing: antialiased;
-  }
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Meiryo", "Noto Sans JP", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
 
-  .page-header {
-    max-width: 56rem;
-    margin: 0 auto;
-    padding: 3rem 1.5rem 1rem;
-    text-align: center;
-  }
-  .page-header h1 {
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-    font-size: clamp(1.4rem, 4vw, 2rem);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-wrap: balance;
-    line-height: 1.4;
-  }
-  .page-header .desc {
-    margin-top: 1rem;
-    font-size: 0.95rem;
-    color: var(--text-sub);
-    max-width: 40rem;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.wrap { max-width: 56rem; margin: 0 auto; padding: 0 1.5rem; }
 
-  .divider {
-    max-width: 56rem;
-    margin: 0 auto;
-    border: none;
-    border-top: 1px solid var(--border);
-  }
+/* ---------- header ---------- */
+.page-header { padding: 3rem 1.5rem 1.5rem; text-align: center; }
+.page-header h1 {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-wrap: balance;
+  line-height: 1.4;
+}
+.page-header .desc {
+  margin: 1rem auto 0;
+  font-size: 0.95rem;
+  color: var(--text-sub);
+  max-width: 40rem;
+}
 
-  nav.model-nav {
-    max-width: 56rem;
-    margin: 0 auto;
-    padding: 0.75rem 1.5rem;
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 50;
-    border-bottom: 1px solid var(--border);
-  }
-  nav.model-nav a {
-    display: inline-block;
-    padding: 0.4rem 1.2rem;
-    border: 1px solid var(--border);
-    border-radius: 2rem;
-    text-decoration: none;
-    color: var(--text);
-    font-size: 0.85rem;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  nav.model-nav a:hover,
-  nav.model-nav a:focus-visible {
-    border-color: var(--accent);
-    color: var(--accent);
-    outline: none;
-  }
+/* ---------- legends ---------- */
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text-sub);
+}
+.legend.page-legend {
+  padding: 1rem 1.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.legend.cp-legend {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.legend-item { display: flex; align-items: center; gap: 0.4rem; }
+.legend-swatch {
+  width: 14px; height: 14px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+.legend-swatch.front { background: #fff; }
+.legend-swatch.back  { background: var(--back-green); }
+.legend-swatch.line  { background: transparent; border: 1px dashed var(--fold-line); }
+.legend-rule {
+  width: 20px; height: 0;
+  border-top: 2px solid currentColor;
+}
+.legend-rule.mtn { color: var(--mountain); }
+.legend-rule.val { color: var(--valley); }
 
-  .model-section {
-    max-width: 56rem;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
-  }
-  .model-section h2 {
-    font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 2px solid var(--accent);
-    display: inline-block;
-  }
+/* ---------- index grid ---------- */
+main { padding: 2.5rem 0 4rem; }
 
-  .content-block {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 1px 4px var(--shadow);
-  }
-  .content-block h3 {
-    font-size: 0.85rem;
-    letter-spacing: 0.1em;
-    color: var(--text-sub);
-    margin-bottom: 1rem;
-  }
-  .content-block .img-wrap {
-    text-align: center;
-  }
-  .content-block .img-wrap img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 4px;
-  }
-  .content-block .img-wrap.cp img {
-    max-width: min(320px, 50%);
-  }
-  
-  /* 変更点：サイズの統一と配置の調整 */
-  .content-block .img-wrap.dual {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    align-items: flex-end;
-  }
-  .content-block .img-wrap.dual figure {
-    margin: 0;
-    flex: 1 1 50%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .content-block .img-wrap.dual img {
-    width: 100%;
-    max-width: 200px;
-    aspect-ratio: 1 / 1;
-    object-fit: contain;
-  }
-  .content-block .img-wrap.dual figcaption {
-    font-size: 0.8rem;
-    color: var(--text-sub);
-    margin-top: 0.5rem;
-  }
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  list-style: none;
+}
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 4px var(--shadow);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.card:hover, .card:focus-visible {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  outline: none;
+}
+.card:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+.card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  display: block;
+}
+.card .name {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
 
-  .legend {
-    max-width: 56rem;
-    margin: 1rem auto 3rem;
-    padding: 0 1.5rem;
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    font-size: 0.8rem;
-    color: var(--text-sub);
-    justify-content: center;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-  }
-  .legend-swatch {
-    width: 14px;
-    height: 14px;
-    border-radius: 2px;
-    border: 1px solid var(--border);
-  }
+/* ---------- detail ---------- */
+.backlink {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  text-decoration: none;
+  padding: 0.3rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+.backlink:hover, .backlink:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
 
-  footer {
-    max-width: 56rem;
-    margin: 0 auto;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    font-size: 0.8rem;
-    color: var(--text-sub);
-    border-top: 1px solid var(--border);
-  }
+.detail h2 {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent);
+  display: block;
+}
 
-  .back-to-top {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    background: var(--bg-card);
-    color: var(--text-sub);
-    font-size: 1.2rem;
-    line-height: 1;
-    cursor: pointer;
-    box-shadow: 0 2px 6px var(--shadow);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.2s;
-    z-index: 100;
-  }
-  .back-to-top.visible {
-    display: flex;
-  }
+.content-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+.content-block h3 {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--text-sub);
+  margin-bottom: 1rem;
+}
+.img-wrap { text-align: center; }
+.img-wrap img { max-width: 100%; height: auto; border-radius: 4px; }
+.img-wrap.cp img { max-width: min(320px, 60%); }
 
-  @media (max-width: 480px) {
-    .page-header { padding: 2rem 1rem 0.5rem; }
-    .model-section { padding: 0 1rem; }
-  }
+.img-wrap.dual { display: flex; gap: 1rem; justify-content: center; align-items: flex-end; }
+.img-wrap.dual figure { flex: 1 1 50%; display: flex; flex-direction: column; align-items: center; }
+.img-wrap.dual img { width: 100%; max-width: 200px; aspect-ratio: 1 / 1; object-fit: contain; }
+.img-wrap.dual figcaption { font-size: 0.8rem; color: var(--text-sub); margin-top: 0.5rem; }
+
+/* ---------- animation controls ---------- */
+.anim-controls {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.anim-btn {
+  padding: 0.4rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  background: transparent;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.anim-btn:hover, .anim-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.anim-btn[disabled] { opacity: 0.4; cursor: default; }
+.anim-btn[disabled]:hover { border-color: var(--border); color: var(--text); }
+
+.anim-stage {
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.anim-stage img,
+.anim-stage canvas { max-width: 100%; height: auto; border-radius: 4px; }
+.anim-stage .placeholder { font-size: 0.85rem; color: var(--text-sub); }
+
+/* ---------- pager ---------- */
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.85rem;
+  padding-top: 0.5rem;
+}
+.pager a { color: var(--text); text-decoration: none; }
+.pager a:hover, .pager a:focus-visible { color: var(--accent); }
+
+footer {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-sub);
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 480px) {
+  .page-header { padding: 2rem 1rem 1rem; }
+  .wrap { padding: 0 1rem; }
+  .img-wrap.cp img { max-width: 80%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
 </style>
+</head>
+<body>
 
 <header class="page-header">
   <h1>逆方向探索による折り紙の折り順自動生成（作成中）</h1>
   <p class="desc">
     展開図から完成形の折り順を自動で生成しています。<br>
-    各作品の展開図・折り順・折りたたみアニメーションを確認できます。
+    作品を選ぶと、展開図・完成形・折り順・折りたたみアニメーションを確認できます。
   </p>
 </header>
 
-<hr class="divider">
-
-<nav class="model-nav">
-  <a href="#crane">鶴</a>
-  <a href="#armet">兜</a>
-  <a href="#chicken">にわとり</a>
-  <a href="#crab">カニ</a>
-  <a href="#dogface">犬の顔</a>
-  <a href="#flower">花</a>
-  <a href="#house">家</a>
-  <a href="#semi">セミ</a>
-  <a href="#windmill">風車</a>
-</nav>
-
-<div class="legend">
-  <span class="legend-item">
-    <span class="legend-swatch" style="background:#fff;"></span> 表面
-  </span>
-  <span class="legend-item">
-    <span class="legend-swatch" style="background:#B4E5A2;"></span> 裏面
-  </span>
-  <span class="legend-item">
-    <span class="legend-swatch" style="background:transparent; border: 1px dashed #C84B4B;"></span> 折り線
-  </span>
+<div class="legend page-legend">
+  <span class="legend-item"><span class="legend-swatch front"></span> 表面</span>
+  <span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>
+  <span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>
 </div>
 
-<!-- ===== 鶴 ===== -->
-<section class="model-section" id="crane">
-  <h2>鶴</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/crane.png" alt="鶴の展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/crane_front.png" alt="鶴の完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/crane_back.png" alt="鶴の完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/crane_fold.png" alt="鶴の折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/crane.gif" alt="鶴の折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
+<main class="wrap">
+  <ul class="grid" id="index"></ul>
+  <div id="detail"></div>
+</main>
 
-<!-- ===== 兜 ===== -->
-<section class="model-section" id="armet">
-  <h2>兜</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/armet.png" alt="兜の展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/armet_front.png" alt="兜の完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/armet_back.png" alt="兜の完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/armet_fold.png" alt="兜の折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/armet.gif" alt="兜の折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ===== にわとり ===== -->
-<section class="model-section" id="chicken">
-  <h2>にわとり</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/chicken.png" alt="にわとりの展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/chicken_front.png" alt="にわとりの完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/chicken_back.png" alt="にわとりの完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/chicken_fold.png" alt="にわとりの折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/chicken.gif" alt="にわとりの折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ===== カニ ===== -->
-<section class="model-section" id="crab">
-  <h2>カニ</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/crab.png" alt="カニの展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/crab_front.png" alt="カニの完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/crab_back.png" alt="カニの完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/crab_fold.png" alt="カニの折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/crab.gif" alt="カニの折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ===== 犬の顔 ===== -->
-<section class="model-section" id="dogface">
-  <h2>犬の顔</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/dogface.png" alt="犬の顔の展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/dogface_front.png" alt="犬の顔の完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/dogface_back.png" alt="犬の顔の完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/dogface_fold.png" alt="犬の顔の折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/dogface.gif" alt="犬の顔の折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ===== 花 ===== -->
-<section class="model-section" id="flower">
-  <h2>花</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/flower.png" alt="花の展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/flower_front.png" alt="花の完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/flower_back.png" alt="花の完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/flower_fold.png" alt="花の折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/flower.gif" alt="花の折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ===== 家 ===== -->
-<section class="model-section" id="house">
-  <h2>家</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/house.png" alt="家の展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/house_front.png" alt="家の完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/house_back.png" alt="家の完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/house_fold.png" alt="家の折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/house.gif" alt="家の折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ===== セミ ===== -->
-<section class="model-section" id="semi">
-  <h2>セミ</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/semi.png" alt="セミの展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/semi_front.png" alt="セミの完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/semi_back.png" alt="セミの完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/semi_fold.png" alt="セミの折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/semi.gif" alt="セミの折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<!-- ===== 風車 ===== -->
-<section class="model-section" id="windmill">
-  <h2>風車</h2>
-  <div class="content-block">
-    <h3>展開図</h3>
-    <div class="img-wrap cp">
-      <img src="crease_patterns/windmill.png" alt="風車の展開図">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>完成形</h3>
-    <div class="img-wrap dual">
-      <figure>
-        <img src="finished/windmill_front.png" alt="風車の完成形（表面）">
-        <figcaption>表面</figcaption>
-      </figure>
-      <figure>
-        <img src="finished/windmill_back.png" alt="風車の完成形（裏面）">
-        <figcaption>裏面</figcaption>
-      </figure>
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折り順一覧</h3>
-    <div class="img-wrap">
-      <img src="steps/windmill_fold.png" alt="風車の折り順一覧">
-    </div>
-  </div>
-  <div class="content-block">
-    <h3>折りたたみアニメーション</h3>
-    <div class="img-wrap">
-      <img src="animations/windmill.gif" alt="風車の折りたたみアニメーション" loading="lazy">
-    </div>
-  </div>
-</section>
-
-<button class="back-to-top" id="backToTop" aria-label="ページ上部へ戻る">↑</button>
+<footer>逆方向探索による折り紙の折り順自動生成 — MIRU 2026</footer>
 
 <script>
-var btn = document.getElementById('backToTop');
-btn.addEventListener('click', function() {
-  window.scrollTo(0, 0);
-});
-window.addEventListener('scroll', function() {
-  if (window.pageYOffset > 300) {
-    btn.classList.add('visible');
-  } else {
-    btn.classList.remove('visible');
-  }
-}, false);
-</script>
+var WORKS = [
+  { id: "crane",    name: "鶴" },
+  { id: "armet",    name: "兜" },
+  { id: "chicken",  name: "にわとり" },
+  { id: "crab",     name: "カニ" },
+  { id: "dogface",  name: "犬の顔" },
+  { id: "flower",   name: "花" },
+  { id: "house",    name: "家" },
+  { id: "semi",     name: "セミ" },
+  { id: "windmill", name: "風車" }
+];
 
-<footer>
-  逆方向探索による折り紙の折り順自動生成 — MIRU 2026
-</footer>
+var indexEl  = document.getElementById("index");
+var detailEl = document.getElementById("detail");
+
+/* 一覧：完成形（表面）をサムネイルに */
+indexEl.innerHTML = WORKS.map(function (w) {
+  return '<li>' +
+    '<a class="card" href="#' + w.id + '">' +
+      '<img src="finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（表面）" loading="lazy">' +
+      '<p class="name">' + w.name + '</p>' +
+    '</a></li>';
+}).join("");
+
+function renderDetail(i) {
+  var w = WORKS[i], prev = WORKS[i - 1], next = WORKS[i + 1];
+
+  detailEl.innerHTML =
+    '<article class="detail">' +
+      '<a class="backlink" href="#">← 一覧へ戻る</a>' +
+      '<h2>' + w.name + '</h2>' +
+
+      '<div class="content-block"><h3>展開図</h3>' +
+        '<div class="img-wrap cp"><img src="crease_patterns/' + w.id + '.png" alt="' + w.name + 'の展開図"></div>' +
+        '<div class="legend cp-legend">' +
+          '<span class="legend-item"><span class="legend-rule mtn"></span> 山折り</span>' +
+          '<span class="legend-item"><span class="legend-rule val"></span> 谷折り</span>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="content-block"><h3>完成形</h3>' +
+        '<div class="img-wrap dual">' +
+          '<figure><img src="finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（表面）"><figcaption>表面</figcaption></figure>' +
+          '<figure><img src="finished/' + w.id + '_back.png" alt="' + w.name + 'の完成形（裏面）"><figcaption>裏面</figcaption></figure>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="content-block"><h3>折り順一覧</h3>' +
+        '<div class="img-wrap"><img src="steps/' + w.id + '_fold.png" alt="' + w.name + 'の折り順一覧"></div>' +
+      '</div>' +
+
+      '<div class="content-block"><h3>折りたたみアニメーション</h3>' +
+        '<div class="anim-controls">' +
+          '<button type="button" class="anim-btn" id="animPlay">再生する</button>' +
+          '<button type="button" class="anim-btn" id="animRestart" disabled>最初から</button>' +
+        '</div>' +
+        '<div class="anim-stage" id="animStage">' +
+          '<span class="placeholder">読み込み中…</span>' +
+        '</div>' +
+      '</div>' +
+
+      '<nav class="pager">' +
+        (prev ? '<a href="#' + prev.id + '">← ' + prev.name + '</a>' : '<span></span>') +
+        (next ? '<a href="#' + next.id + '">' + next.name + ' →</a>' : '<span></span>') +
+      '</nav>' +
+    '</article>';
+
+  var stage   = document.getElementById("animStage");
+  var play    = document.getElementById("animPlay");
+  var restart = document.getElementById("animRestart");
+
+  var gifSrc = 'animations/' + w.id + '.gif';
+
+  /* 静止状態：GIF を読み込んだ直後に canvas へ描くと 1 コマ目が取れる */
+  function showFirstFrame() {
+    var probe = new Image();
+    probe.onload = function () {
+      var c = document.createElement("canvas");
+      c.width  = probe.naturalWidth;
+      c.height = probe.naturalHeight;
+      c.getContext("2d").drawImage(probe, 0, 0);
+      c.setAttribute("role", "img");
+      c.setAttribute("aria-label", w.name + 'の折りたたみアニメーション（1コマ目）');
+      stage.innerHTML = "";
+      stage.appendChild(c);
+    };
+    probe.onerror = function () {
+      stage.innerHTML = '<span class="placeholder">アニメーションを読み込めませんでした</span>';
+    };
+    probe.src = gifSrc;
+  }
+
+  /* 再生：クエリを変えて読み直し、先頭から動かす */
+  function play_() {
+    stage.innerHTML = '<img src="' + gifSrc + '?t=' + Date.now() + '" alt="' + w.name + 'の折りたたみアニメーション">';
+    restart.disabled = false;
+  }
+
+  play.addEventListener("click", play_);
+  restart.addEventListener("click", play_);
+
+  showFirstFrame();
+
+  indexEl.style.display = "none";
+}
+
+function route() {
+  var id = location.hash.slice(1);
+  var i = -1;
+  for (var k = 0; k < WORKS.length; k++) { if (WORKS[k].id === id) { i = k; break; } }
+
+  if (i === -1) {
+    detailEl.innerHTML = "";
+    indexEl.style.display = "";
+  } else {
+    renderDetail(i);
+  }
+  window.scrollTo(0, 0);
+}
+
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>
