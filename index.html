@@ -123,9 +123,24 @@ main { padding: 2.5rem 0 4rem; }
   outline: none;
 }
 .card:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
-.card img {
+.card .thumb {
   width: 100%;
   aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4%;
+}
+.card .thumb img,
+.card .thumb canvas {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   display: block;
 }
@@ -291,10 +306,84 @@ var detailEl = document.getElementById("detail");
 indexEl.innerHTML = WORKS.map(function (w) {
   return '<li>' +
     '<a class="card" href="#' + w.id + '">' +
-      '<img src="finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（表面）" loading="lazy">' +
+      '<span class="thumb">' +
+        '<img src="finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（表面）" ' +
+             'loading="lazy" data-trim>' +
+      '</span>' +
       '<p class="name">' + w.name + '</p>' +
     '</a></li>';
 }).join("");
+
+/* 画像ごとに余白量が違うためサイズがばらつく。
+   余白を検出して切り落とし、正方形に正規化して揃える。 */
+function trimThumb(img) {
+  var w = img.naturalWidth, h = img.naturalHeight;
+  if (!w || !h) return;
+
+  var src = document.createElement("canvas");
+  src.width = w; src.height = h;
+  var sctx = src.getContext("2d", { willReadFrequently: true });
+  sctx.drawImage(img, 0, 0);
+
+  var data;
+  try {
+    data = sctx.getImageData(0, 0, w, h).data;
+  } catch (e) {
+    return; /* 別オリジンで読めない場合は元画像のまま */
+  }
+
+  /* 背景（白 or 透明）でない画素の外接矩形を求める */
+  var minX = w, minY = h, maxX = -1, maxY = -1;
+  for (var y = 0; y < h; y++) {
+    for (var x = 0; x < w; x++) {
+      var i = (y * w + x) * 4;
+      var a = data[i + 3];
+      if (a < 16) continue;
+      if (data[i] > 244 && data[i + 1] > 244 && data[i + 2] > 244) continue;
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
+  }
+  if (maxX < 0) return; /* 全面が背景 */
+
+  var cw = maxX - minX + 1, ch = maxY - minY + 1;
+
+  /* 面積基準で正規化する（長辺基準だと横長が大きく縦長が小さく見えるため）。
+     ただし極端な縦横比だとキャンバスをはみ出して切れるので、
+     幅・高さのどちらも収まるようにクランプする。 */
+  var TARGET = 1000;
+  var MARGIN = 0.90;                       /* キャンバス内で使える割合 */
+  var avail  = TARGET * MARGIN;
+
+  var scale = avail / Math.sqrt(cw * ch);            /* 面積を揃える */
+  scale = Math.min(scale, avail / cw, avail / ch);   /* はみ出しを防ぐ */
+
+  var dw = Math.round(cw * scale), dh = Math.round(ch * scale);
+
+  var out = document.createElement("canvas");
+  out.width = TARGET; out.height = TARGET;
+  var octx = out.getContext("2d");
+  octx.imageSmoothingQuality = "high";
+  octx.drawImage(
+    src, minX, minY, cw, ch,
+    Math.round((TARGET - dw) / 2), Math.round((TARGET - dh) / 2), dw, dh
+  );
+
+  out.className = img.className;
+  out.setAttribute("role", "img");
+  out.setAttribute("aria-label", img.alt);
+  img.replaceWith(out);
+}
+
+Array.prototype.forEach.call(
+  indexEl.querySelectorAll("img[data-trim]"),
+  function (img) {
+    if (img.complete) trimThumb(img);
+    else img.addEventListener("load", function () { trimThumb(img); });
+  }
+);
 
 function renderDetail(i) {
   var w = WORKS[i], prev = WORKS[i - 1], next = WORKS[i + 1];
