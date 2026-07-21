@@ -273,11 +273,6 @@ footer {
   </p>
 </header>
 
-<div class="legend page-legend">
-  <span class="legend-item"><span class="legend-swatch front"></span> 表面</span>
-  <span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>
-  <span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>
-</div>
 
 <main class="wrap">
   <ul class="grid" id="index"></ul>
@@ -408,8 +403,13 @@ function renderDetail(i) {
         '</div>' +
       '</div>' +
 
-      '<div class="content-block"><h3>折り順一覧</h3>' +
-        '<div class="img-wrap"><img src="steps/' + w.id + '_fold.png" alt="' + w.name + 'の折り順一覧"></div>' +
+      '<div class="content-block"><h3>折り順</h3>' +
+        '<div class="img-wrap"><img src="steps/' + w.id + '_fold.png" alt="' + w.name + 'の折り順"></div>' +
+        '<div class="legend cp-legend">' +
+          '<span class="legend-item"><span class="legend-swatch front"></span> 表面</span>' +
+          '<span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>' +
+          '<span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>' +
+        '</div>' +
       '</div>' +
 
       '<div class="content-block"><h3>折りたたみアニメーション</h3>' +
