@@ -257,6 +257,18 @@ footer {
   .page-header { padding: 2rem 1rem 1rem; }
   .wrap { padding: 0 1rem; }
   .img-wrap.cp img { max-width: 80%; }
+
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+  .card {
+    padding: 0.5rem;
+  }
+  .card .name {
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; }
@@ -455,7 +467,15 @@ function renderDetail(i) {
 
   /* 再生：クエリを変えて読み直し、先頭から動かす */
   function play_() {
-    stage.innerHTML = '<img src="' + gifSrc + '?t=' + Date.now() + '" alt="' + w.name + 'の折りたたみアニメーション">';
+    stage.style.minHeight = stage.offsetHeight + 'px';
+    var img = new Image();
+    img.alt = w.name + 'の折りたたみアニメーション';
+    img.onload = function () {
+      stage.style.minHeight = '';
+    };
+    img.src = gifSrc + '?t=' + Date.now();
+    stage.innerHTML = '';
+    stage.appendChild(img);
     restart.disabled = false;
   }
 
