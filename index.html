@@ -437,7 +437,6 @@ function renderDetail(i) {
       '<div class="content-block"><h3>折りたたみアニメーション</h3>' +
         '<div class="anim-controls">' +
           '<button type="button" class="anim-btn" id="animPlay">再生する</button>' +
-          '<button type="button" class="anim-btn" id="animRestart" disabled>最初から</button>' +
         '</div>' +
         '<div class="anim-stage" id="animStage">' +
           '<span class="placeholder">読み込み中…</span>' +
@@ -452,7 +451,6 @@ function renderDetail(i) {
 
   var stage   = document.getElementById("animStage");
   var play    = document.getElementById("animPlay");
-  var restart = document.getElementById("animRestart");
 
   var gifSrc = 'animations/' + w.id + '.gif';
 
@@ -486,11 +484,9 @@ function renderDetail(i) {
     img.src = gifSrc + '?t=' + Date.now();
     stage.innerHTML = '';
     stage.appendChild(img);
-    restart.disabled = false;
   }
 
   play.addEventListener("click", play_);
-  restart.addEventListener("click", play_);
 
   showFirstFrame();
 
