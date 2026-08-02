@@ -61,6 +61,9 @@ body {
   letter-spacing: 0.04em;
   text-wrap: balance;
   line-height: 1.4;
+  /* 自動改行を禁止し、<wbr> を入れた位置でのみ改行させる */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 .page-header .desc {
   margin: 1rem auto 0;
@@ -285,7 +288,7 @@ footer {
 
 <header class="page-header">
   <p class="conf-tag">MIRU 2026</p>
-  <h1>逆方向探索による折り紙の折り順自動生成</h1>
+  <h1>逆方向探索による<wbr>折り紙の折り順自動生成</h1>
   <p class="desc">
     展開図から完成形の折り順を自動で生成しています。<br>
     作品を選ぶと、展開図・完成形・折り順・折りたたみアニメーションを確認できます。
