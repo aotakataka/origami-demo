@@ -48,6 +48,12 @@ body {
 
 /* ---------- header ---------- */
 .page-header { padding: 3rem 1.5rem 1.5rem; text-align: center; }
+.page-header .conf-tag {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
 .page-header h1 {
   font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
   font-size: clamp(1.4rem, 4vw, 2rem);
@@ -278,6 +284,7 @@ footer {
 <body>
 
 <header class="page-header">
+  <p class="conf-tag">MIRU 2026</p>
   <h1>逆方向探索による折り紙の折り順自動生成</h1>
   <p class="desc">
     展開図から完成形の折り順を自動で生成しています。<br>
