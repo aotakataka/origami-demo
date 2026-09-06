@@ -255,6 +255,9 @@ footer {
   color: var(--text-sub);
   border-top: 1px solid var(--border);
 }
+footer .author { margin-top: 0.4rem; }
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
 
 @media (max-width: 480px) {
   .page-header { padding: 2rem 1rem 1rem; }
@@ -294,7 +297,10 @@ footer {
   <div id="detail"></div>
 </main>
 
-<footer>逆方向探索による折り紙の折り順自動生成</footer>
+<footer>
+  <p>逆方向探索による折り紙の折り順自動生成</p>
+  <p class="author">Contact: <a href="mailto:aotaka@toki.waseda.jp">aotaka@toki.waseda.jp</a></p>
+</footer>
 
 <script>
 var WORKS = [
