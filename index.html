@@ -342,8 +342,8 @@ footer a:hover { text-decoration: underline; }
       <ul class="grid" id="index"></ul>
     </div>
     <div class="tab-panel" id="panel-3d">
-      <ul class="grid" id="index-3d"></ul>
-      <div class="tab-empty" id="empty-3d">準備中</div>
+      <ul class="grid" id="index3d"></ul>
+      <div class="tab-empty" id="empty3d" hidden>準備中</div>
     </div>
   </div>
   <div id="detail"></div>
@@ -355,6 +355,7 @@ footer a:hover { text-decoration: underline; }
 </footer>
 
 <script>
+/* 平面に折りたためる作品（2D） */
 var WORKS = [
   { id: "crane",    name: "鶴" },
   { id: "armet",    name: "兜" },
@@ -367,30 +368,52 @@ var WORKS = [
   { id: "windmill", name: "風車" }
 ];
 
-var indexEl  = document.getElementById("index");
-var detailEl = document.getElementById("detail");
-var tabsWrap = document.getElementById("tabsWrap");
+/* 立体形状の作品（3D）。素材は 3d/ 以下に置く */
+var WORKS_3D = [
+  { id: "crane", name: "鶴" }
+];
 
-/* タブ切り替え */
+var indexEl   = document.getElementById("index");
+var index3dEl = document.getElementById("index3d");
+var empty3dEl = document.getElementById("empty3d");
+var detailEl  = document.getElementById("detail");
+var tabsWrap  = document.getElementById("tabsWrap");
+
+/* 3D 作品のハッシュは "3d-" を前置して 2D と区別する */
+function hashOf(work, is3d) { return "#" + (is3d ? "3d-" : "") + work.id; }
+
+function activateTab(tab) {
+  document.querySelectorAll(".tab-btn").forEach(function (b) {
+    b.classList.toggle("active", b.dataset.tab === tab);
+  });
+  document.querySelectorAll(".tab-panel").forEach(function (p) {
+    p.classList.toggle("active", p.id === "panel-" + tab);
+  });
+}
+
 document.getElementById("tabs").addEventListener("click", function (e) {
   var btn = e.target.closest(".tab-btn");
-  if (!btn) return;
-  var tab = btn.dataset.tab;
-  document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.toggle("active", b === btn); });
-  document.querySelectorAll(".tab-panel").forEach(function (p) { p.classList.toggle("active", p.id === "panel-" + tab); });
+  if (btn) activateTab(btn.dataset.tab);
 });
 
-/* 一覧：完成形（表面）をサムネイルに */
-indexEl.innerHTML = WORKS.map(function (w) {
-  return '<li>' +
-    '<a class="card" href="#' + w.id + '">' +
-      '<span class="thumb">' +
-        '<img src="finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（表面）" ' +
-             'loading="lazy" data-trim>' +
-      '</span>' +
-      '<p class="name">' + w.name + '</p>' +
-    '</a></li>';
-}).join("");
+/* 一覧：完成形をサムネイルに */
+function renderIndex(el, works, is3d) {
+  el.innerHTML = works.map(function (w) {
+    var src = (is3d ? "3d/" : "2d/") + "finished/" + w.id + "_front.png";
+    var alt = w.name + "の完成形";
+    return '<li>' +
+      '<a class="card" href="' + hashOf(w, is3d) + '">' +
+        '<span class="thumb">' +
+          '<img src="' + src + '" alt="' + alt + '" loading="lazy" data-trim>' +
+        '</span>' +
+        '<p class="name">' + w.name + '</p>' +
+      '</a></li>';
+  }).join("");
+}
+
+renderIndex(indexEl, WORKS, false);
+renderIndex(index3dEl, WORKS_3D, true);
+empty3dEl.hidden = WORKS_3D.length > 0;
 
 /* 画像ごとに余白量が違うためサイズがばらつく。
    余白を検出して切り落とし、正方形に正規化して揃える。 */
@@ -456,114 +479,144 @@ function trimThumb(img) {
 }
 
 Array.prototype.forEach.call(
-  indexEl.querySelectorAll("img[data-trim]"),
+  document.querySelectorAll("img[data-trim]"),
   function (img) {
     if (img.complete) trimThumb(img);
     else img.addEventListener("load", function () { trimThumb(img); });
   }
 );
 
-function renderDetail(i) {
-  var w = WORKS[i], prev = WORKS[i - 1], next = WORKS[i + 1];
+/* アニメーションのブロック。key は同一ページ内で一意な識別子 */
+function animBlockHtml(key, title) {
+  return '<div class="content-block"><h3>' + title + '</h3>' +
+      '<div class="anim-controls">' +
+        '<button type="button" class="anim-btn" data-play="' + key + '">再生する</button>' +
+      '</div>' +
+      '<div class="anim-stage" data-stage="' + key + '">' +
+        '<span class="placeholder">読み込み中…</span>' +
+      '</div>' +
+    '</div>';
+}
 
-  detailEl.innerHTML =
+/* GIF の静止表示と再生を配線する */
+function setupAnim(key, gifSrc, label) {
+  var stage = detailEl.querySelector('[data-stage="' + key + '"]');
+  var play  = detailEl.querySelector('[data-play="' + key + '"]');
+  if (!stage || !play) return;
+
+  /* 静止状態：GIF を読み込んだ直後に canvas へ描くと 1 コマ目が取れる */
+  var probe = new Image();
+  probe.onload = function () {
+    var c = document.createElement("canvas");
+    c.width  = probe.naturalWidth;
+    c.height = probe.naturalHeight;
+    c.getContext("2d").drawImage(probe, 0, 0);
+    c.setAttribute("role", "img");
+    c.setAttribute("aria-label", label + '（1コマ目）');
+    stage.innerHTML = "";
+    stage.appendChild(c);
+  };
+  probe.onerror = function () {
+    stage.innerHTML = '<span class="placeholder">アニメーションを読み込めませんでした</span>';
+  };
+  probe.src = gifSrc;
+
+  /* 再生：クエリを変えて読み直し、先頭から動かす */
+  play.addEventListener("click", function () {
+    stage.style.minHeight = stage.offsetHeight + 'px';
+    var img = new Image();
+    img.alt = label;
+    img.onload = function () { stage.style.minHeight = ''; };
+    img.src = gifSrc + '?t=' + Date.now();
+    stage.innerHTML = '';
+    stage.appendChild(img);
+  });
+}
+
+function renderDetail(works, i, is3d) {
+  var w = works[i], prev = works[i - 1], next = works[i + 1];
+  var base = is3d ? "3d/" : "2d/";
+
+  var html =
     '<article class="detail">' +
       '<a class="backlink" href="#">← 一覧へ戻る</a>' +
-      '<h2>' + w.name + '</h2>' +
+      '<h2>' + w.name + (is3d ? '（立体）' : '') + '</h2>';
 
+  /* 展開図は 2D 作品のみ */
+  if (!is3d) {
+    html +=
       '<div class="content-block"><h3>展開図</h3>' +
-        '<div class="img-wrap cp"><img src="crease_patterns/' + w.id + '.png" alt="' + w.name + 'の展開図"></div>' +
+        '<div class="img-wrap cp"><img src="' + base + 'crease_patterns/' + w.id + '.png" alt="' + w.name + 'の展開図"></div>' +
         '<div class="legend cp-legend">' +
           '<span class="legend-item"><span class="legend-rule mtn"></span> 山折り</span>' +
           '<span class="legend-item"><span class="legend-rule val"></span> 谷折り</span>' +
         '</div>' +
-      '</div>' +
+      '</div>';
+  }
 
-      '<div class="content-block"><h3>完成形</h3>' +
-        '<div class="img-wrap dual">' +
-          '<figure><img src="finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（表面）"><figcaption>表面</figcaption></figure>' +
-          '<figure><img src="finished/' + w.id + '_back.png" alt="' + w.name + 'の完成形（裏面）"><figcaption>裏面</figcaption></figure>' +
-        '</div>' +
-      '</div>' +
+  /* 完成形：2D は表裏の 2 枚、3D は立体形状の 1 枚 */
+  html += '<div class="content-block"><h3>完成形</h3>';
+  if (is3d) {
+    html += '<div class="img-wrap"><img src="' + base + 'finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（立体）"></div>';
+  } else {
+    html +=
+      '<div class="img-wrap dual">' +
+        '<figure><img src="' + base + 'finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（表面）"><figcaption>表面</figcaption></figure>' +
+        '<figure><img src="' + base + 'finished/' + w.id + '_back.png" alt="' + w.name + 'の完成形（裏面）"><figcaption>裏面</figcaption></figure>' +
+      '</div>';
+  }
+  html += '</div>';
 
-      '<div class="content-block"><h3>折り順</h3>' +
-        '<div class="img-wrap"><img src="steps/' + w.id + '_fold.png" alt="' + w.name + 'の折り順"></div>' +
-        '<div class="legend cp-legend">' +
-          '<span class="legend-item"><span class="legend-swatch front"></span> 表面</span>' +
-          '<span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>' +
-          '<span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>' +
-        '</div>' +
+  html +=
+    '<div class="content-block"><h3>折り順</h3>' +
+      '<div class="img-wrap"><img src="' + base + 'steps/' + w.id + '_fold.png" alt="' + w.name + 'の折り順"></div>' +
+      '<div class="legend cp-legend">' +
+        '<span class="legend-item"><span class="legend-swatch front"></span> 表面</span>' +
+        '<span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>' +
+        '<span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>' +
       '</div>' +
+    '</div>';
 
-      '<div class="content-block"><h3>折りたたみアニメーション</h3>' +
-        '<div class="anim-controls">' +
-          '<button type="button" class="anim-btn" id="animPlay">再生する</button>' +
-        '</div>' +
-        '<div class="anim-stage" id="animStage">' +
-          '<span class="placeholder">読み込み中…</span>' +
-        '</div>' +
-      '</div>' +
+  html += animBlockHtml("fold", "折りたたみアニメーション");
+  /* 3D は平面に折りたたんだあと立体に起こす工程を別に見せる */
+  if (is3d) html += animBlockHtml("shape", "立体化アニメーション");
 
+  html +=
       '<nav class="pager">' +
-        (prev ? '<a href="#' + prev.id + '">← ' + prev.name + '</a>' : '<span></span>') +
-        (next ? '<a href="#' + next.id + '">' + next.name + ' →</a>' : '<span></span>') +
+        (prev ? '<a href="' + hashOf(prev, is3d) + '">← ' + prev.name + '</a>' : '<span></span>') +
+        (next ? '<a href="' + hashOf(next, is3d) + '">' + next.name + ' →</a>' : '<span></span>') +
       '</nav>' +
     '</article>';
 
-  var stage   = document.getElementById("animStage");
-  var play    = document.getElementById("animPlay");
+  detailEl.innerHTML = html;
 
-  var gifSrc = 'animations/' + w.id + '_animation.gif';
-
-  /* 静止状態：GIF を読み込んだ直後に canvas へ描くと 1 コマ目が取れる */
-  function showFirstFrame() {
-    var probe = new Image();
-    probe.onload = function () {
-      var c = document.createElement("canvas");
-      c.width  = probe.naturalWidth;
-      c.height = probe.naturalHeight;
-      c.getContext("2d").drawImage(probe, 0, 0);
-      c.setAttribute("role", "img");
-      c.setAttribute("aria-label", w.name + 'の折りたたみアニメーション（1コマ目）');
-      stage.innerHTML = "";
-      stage.appendChild(c);
-    };
-    probe.onerror = function () {
-      stage.innerHTML = '<span class="placeholder">アニメーションを読み込めませんでした</span>';
-    };
-    probe.src = gifSrc;
+  setupAnim("fold", base + 'animations/' + w.id + '_animation.gif',
+            w.name + 'の折りたたみアニメーション');
+  if (is3d) {
+    setupAnim("shape", base + 'animations/' + w.id + '_3d_animation.gif',
+              w.name + 'の立体化アニメーション');
   }
-
-  /* 再生：クエリを変えて読み直し、先頭から動かす */
-  function play_() {
-    stage.style.minHeight = stage.offsetHeight + 'px';
-    var img = new Image();
-    img.alt = w.name + 'の折りたたみアニメーション';
-    img.onload = function () {
-      stage.style.minHeight = '';
-    };
-    img.src = gifSrc + '?t=' + Date.now();
-    stage.innerHTML = '';
-    stage.appendChild(img);
-  }
-
-  play.addEventListener("click", play_);
-
-  showFirstFrame();
 
   tabsWrap.style.display = "none";
 }
 
+function findWork(works, id) {
+  for (var k = 0; k < works.length; k++) { if (works[k].id === id) return k; }
+  return -1;
+}
+
 function route() {
-  var id = location.hash.slice(1);
-  var i = -1;
-  for (var k = 0; k < WORKS.length; k++) { if (WORKS[k].id === id) { i = k; break; } }
+  var hash = location.hash.slice(1);
+  var is3d = hash.indexOf("3d-") === 0;
+  var works = is3d ? WORKS_3D : WORKS;
+  var i = findWork(works, is3d ? hash.slice(3) : hash);
 
   if (i === -1) {
     detailEl.innerHTML = "";
     tabsWrap.style.display = "";
   } else {
-    renderDetail(i);
+    renderDetail(works, i, is3d);
+    activateTab(is3d ? "3d" : "2d"); /* 一覧へ戻ったとき同じタブが開くように */
   }
   window.scrollTo(0, 0);
 }
