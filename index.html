@@ -100,6 +100,45 @@ body {
 .legend-rule.mtn { color: var(--mountain); }
 .legend-rule.val { color: var(--valley); }
 
+/* ---------- tabs ---------- */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 2rem;
+}
+.tab-btn {
+  padding: 0.6rem 1.8rem;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--accent);
+}
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 2px;
+  background: var(--accent);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.tab-empty {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-sub);
+  font-size: 0.95rem;
+}
+
 /* ---------- index grid ---------- */
 main { padding: 2.5rem 0 4rem; }
 
@@ -263,6 +302,7 @@ footer a:hover { text-decoration: underline; }
   .page-header { padding: 2rem 1rem 1rem; }
   .wrap { padding: 0 1rem; }
   .img-wrap.cp img { max-width: 80%; }
+  .tab-btn { padding: 0.5rem 1.2rem; font-size: 0.85rem; }
 
   .grid {
     grid-template-columns: repeat(3, 1fr);
@@ -293,7 +333,19 @@ footer a:hover { text-decoration: underline; }
 
 
 <main class="wrap">
-  <ul class="grid" id="index"></ul>
+  <div id="tabsWrap">
+    <div class="tabs" id="tabs">
+      <button type="button" class="tab-btn active" data-tab="2d">2D</button>
+      <button type="button" class="tab-btn" data-tab="3d">3D</button>
+    </div>
+    <div class="tab-panel active" id="panel-2d">
+      <ul class="grid" id="index"></ul>
+    </div>
+    <div class="tab-panel" id="panel-3d">
+      <ul class="grid" id="index-3d"></ul>
+      <div class="tab-empty" id="empty-3d">準備中</div>
+    </div>
+  </div>
   <div id="detail"></div>
 </main>
 
@@ -317,6 +369,16 @@ var WORKS = [
 
 var indexEl  = document.getElementById("index");
 var detailEl = document.getElementById("detail");
+var tabsWrap = document.getElementById("tabsWrap");
+
+/* タブ切り替え */
+document.getElementById("tabs").addEventListener("click", function (e) {
+  var btn = e.target.closest(".tab-btn");
+  if (!btn) return;
+  var tab = btn.dataset.tab;
+  document.querySelectorAll(".tab-btn").forEach(function (b) { b.classList.toggle("active", b === btn); });
+  document.querySelectorAll(".tab-panel").forEach(function (p) { p.classList.toggle("active", p.id === "panel-" + tab); });
+});
 
 /* 一覧：完成形（表面）をサムネイルに */
 indexEl.innerHTML = WORKS.map(function (w) {
@@ -489,7 +551,7 @@ function renderDetail(i) {
 
   showFirstFrame();
 
-  indexEl.style.display = "none";
+  tabsWrap.style.display = "none";
 }
 
 function route() {
@@ -499,7 +561,7 @@ function route() {
 
   if (i === -1) {
     detailEl.innerHTML = "";
-    indexEl.style.display = "";
+    tabsWrap.style.display = "";
   } else {
     renderDetail(i);
   }
