@@ -55,7 +55,6 @@ body {
   letter-spacing: 0.04em;
   text-wrap: balance;
   line-height: 1.4;
-  /* 自動改行を禁止し、<wbr> を入れた位置でのみ改行させる */
   word-break: keep-all;
   overflow-wrap: break-word;
 }
@@ -285,6 +284,99 @@ main { padding: 2.5rem 0 4rem; }
 .pager a { color: var(--text); text-decoration: none; }
 .pager a:hover, .pager a:focus-visible { color: var(--accent); }
 
+/* ---------- steps ---------- */
+.more-link {
+  display: block;
+  width: fit-content;
+  margin: 1.25rem auto 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 0.45rem 1.4rem;
+  border: 1px solid var(--accent);
+  border-radius: 2rem;
+  transition: background 0.2s, color 0.2s;
+}
+.more-link:hover, .more-link:focus-visible {
+  background: var(--accent);
+  color: var(--bg-card);
+  outline: none;
+}
+.steps-meta {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  margin: -0.75rem 0 1.25rem;
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 4px var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.step-figure {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  padding: 4%;
+}
+.step-figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.step-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+.step-num {
+  flex: none;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  border-radius: 1rem;
+  background: var(--accent);
+  color: var(--bg-card);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-kind {
+  font-size: 0.75rem;
+  color: var(--text-sub);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.05rem 0.6rem;
+}
+.step-text {
+  margin-top: 0.5rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.step-card .anim-btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+.step-text + .anim-btn { margin-top: 0.8rem; }
+.step-card.finish .step-text { font-weight: 600; }
+
 footer {
   max-width: 56rem;
   margin: 0 auto;
@@ -298,6 +390,9 @@ footer .author { margin-top: 0.4rem; }
 footer a { color: var(--accent); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
 
+@media (max-width: 640px) {
+  .steps-grid { grid-template-columns: 1fr; }
+}
 @media (max-width: 480px) {
   .page-header { padding: 2rem 1rem 1rem; }
   .wrap { padding: 0 1rem; }
@@ -416,8 +511,6 @@ renderIndex(indexEl, WORKS, false);
 renderIndex(index3dEl, WORKS_3D, true);
 empty3dEl.hidden = WORKS_3D.length > 0;
 
-/* 画像ごとに余白量が違うためサイズがばらつく。
-   余白を検出して切り落とし、正方形に正規化して揃える。 */
 function trimThumb(img) {
   var w = img.naturalWidth, h = img.naturalHeight;
   if (!w || !h) return;
@@ -452,15 +545,13 @@ function trimThumb(img) {
 
   var cw = maxX - minX + 1, ch = maxY - minY + 1;
 
-  /* 面積基準で正規化する（長辺基準だと横長が大きく縦長が小さく見えるため）。
-     ただし極端な縦横比だとキャンバスをはみ出して切れるので、
-     幅・高さのどちらも収まるようにクランプする。 */
+  /* 面積基準で正規化する*/
   var TARGET = 1000;
-  var MARGIN = 0.90;                       /* キャンバス内で使える割合 */
+  var MARGIN = 0.90;
   var avail  = TARGET * MARGIN;
 
-  var scale = avail / Math.sqrt(cw * ch);            /* 面積を揃える */
-  scale = Math.min(scale, avail / cw, avail / ch);   /* はみ出しを防ぐ */
+  var scale = avail / Math.sqrt(cw * ch);
+  scale = Math.min(scale, avail / cw, avail / ch);
 
   var dw = Math.round(cw * scale), dh = Math.round(ch * scale);
 
@@ -505,7 +596,7 @@ function setupAnim(key, gifSrc, label) {
   var play  = detailEl.querySelector('[data-play="' + key + '"]');
   if (!stage || !play) return;
 
-  /* 静止状態：GIF を読み込んだ直後に canvas へ描くと 1 コマ目が取れる */
+  /* 静止状態 */
   var probe = new Image();
   probe.onload = function () {
     var c = document.createElement("canvas");
@@ -522,7 +613,7 @@ function setupAnim(key, gifSrc, label) {
   };
   probe.src = gifSrc;
 
-  /* 再生：クエリを変えて読み直し、先頭から動かす */
+  /* 再生 */
   play.addEventListener("click", function () {
     stage.style.minHeight = stage.offsetHeight + 'px';
     var img = new Image();
@@ -576,6 +667,7 @@ function renderDetail(works, i, is3d) {
         '<span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>' +
         '<span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>' +
       '</div>' +
+      '<a class="more-link" href="' + hashOf(w, is3d) + '/steps">工程を詳しく見る →</a>' +
     '</div>';
 
   html += animBlockHtml("fold", "折りたたみアニメーション");
@@ -601,13 +693,106 @@ function renderDetail(works, i, is3d) {
   tabsWrap.style.display = "none";
 }
 
+/* HTML に埋め込む文字列をエスケープする */
+function esc(text) {
+  return String(text).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
+/* 工程ごとの詳細：steps/{id}/steps.json を読み、工程をカードで並べる */
+function renderSteps(works, i, is3d) {
+  var w = works[i];
+  var dir = (is3d ? "3d/" : "2d/") + "steps/" + w.id + "/";
+  var back = '<a class="backlink" href="' + hashOf(w, is3d) + '">← ' + esc(w.name) + 'に戻る</a>';
+
+  detailEl.innerHTML =
+    '<article class="detail">' + back +
+      '<h2>' + esc(w.name) + (is3d ? '（立体）' : '') + 'の折り方</h2>' +
+      '<div id="stepsBody"><p class="steps-meta">読み込み中…</p></div>' +
+    '</article>';
+  tabsWrap.style.display = "none";
+  var body = document.getElementById("stepsBody");
+
+  fetch(dir + "steps.json")
+    .then(function (res) {
+      if (!res.ok) throw new Error(res.status);
+      return res.json();
+    })
+    .then(function (data) {
+      /* 表示中に別の作品へ移っていたら描かない */
+      if (document.getElementById("stepsBody") !== body) return;
+      var steps = data.steps;
+      var count = steps.filter(function (s) { return s.n !== null; }).length;
+      body.innerHTML =
+        '<p class="steps-meta">全' + count + '工程</p>' +
+        '<ol class="steps-grid">' + steps.map(function (s, k) {
+          var finish = s.n === null;
+          var alt = finish ? w.name + "のできあがり" : "工程" + s.n + "：" + s.text;
+          return '<li class="step-card' + (finish ? ' finish' : '') + '">' +
+            '<div class="step-figure">' +
+              '<img src="' + dir + esc(s.image) + '" alt="' + esc(alt) + '" loading="lazy" data-still="' + dir + esc(s.image) + '">' +
+            '</div>' +
+            '<div class="step-head">' +
+              (finish ? '' : '<span class="step-num">' + s.n + '</span>') +
+              (finish ? '' : '<span class="step-kind">' + esc(s.label) + '</span>') +
+            '</div>' +
+            '<p class="step-text">' + esc(s.text) + '</p>' +
+            (s.animation
+              ? '<button type="button" class="anim-btn" data-anim="' + dir + esc(s.animation) + '" data-duration="' + (s.duration || 0) + '" aria-pressed="false">▶ 動きを見る</button>'
+              : '') +
+          '</li>';
+        }).join("") + '</ol>' +
+        '<nav class="pager">' + back + '<span></span></nav>';
+    })
+    .catch(function () {
+      if (document.getElementById("stepsBody") !== body) return;
+      body.innerHTML = '<p class="steps-meta">工程のデータを読み込めませんでした。</p>';
+    });
+}
+
+/* 工程カードの「動きを見る」：絵をその工程だけのアニメーションに切り替える。
+   GIF は1回だけ再生されて折り終えた形で止まるので、再生時間が過ぎたらボタンを「もう一度見る」に戻す。
+   再生中にもう一度押すと止めて静止画に戻す */
+var stepTimers = new WeakMap();
+
+function setAnimButton(btn, playing, label) {
+  btn.setAttribute("aria-pressed", playing ? "true" : "false");
+  btn.textContent = label;
+}
+
+detailEl.addEventListener("click", function (e) {
+  var btn = e.target.closest("[data-anim]");
+  if (!btn) return;
+  var img = btn.closest(".step-card").querySelector("img[data-still]");
+  clearTimeout(stepTimers.get(btn));
+  img.onload = null;
+
+  if (btn.getAttribute("aria-pressed") === "true") {
+    img.src = img.dataset.still;
+    setAnimButton(btn, false, "▶ 動きを見る");
+    return;
+  }
+  var duration = Number(btn.dataset.duration) || 0;
+  img.onload = function () {
+    img.onload = null;
+    stepTimers.set(btn, setTimeout(function () {
+      setAnimButton(btn, false, "↻ もう一度見る");
+    }, duration));
+  };
+  img.src = btn.dataset.anim + "?t=" + Date.now();
+  setAnimButton(btn, true, "■ 止める");
+});
+
 function findWork(works, id) {
   for (var k = 0; k < works.length; k++) { if (works[k].id === id) return k; }
   return -1;
 }
 
 function route() {
-  var hash = location.hash.slice(1);
+  /* "#crane" は作品ページ、"#crane/steps" はその工程ごとの詳細 */
+  var parts = location.hash.slice(1).split("/");
+  var hash = parts[0];
   var is3d = hash.indexOf("3d-") === 0;
   var works = is3d ? WORKS_3D : WORKS;
   var i = findWork(works, is3d ? hash.slice(3) : hash);
@@ -616,8 +801,9 @@ function route() {
     detailEl.innerHTML = "";
     tabsWrap.style.display = "";
   } else {
-    renderDetail(works, i, is3d);
-    activateTab(is3d ? "3d" : "2d"); /* 一覧へ戻ったとき同じタブが開くように */
+    if (parts[1] === "steps") renderSteps(works, i, is3d);
+    else renderDetail(works, i, is3d);
+    activateTab(is3d ? "3d" : "2d");
   }
   window.scrollTo(0, 0);
 }
