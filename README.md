@@ -7,12 +7,19 @@
 
 ```
 origami-demo/
-├── index.html            # デモページ本体
-├── crease_patterns/      # 各作品の展開図 (PNG)
-├── finished/             # 各作品の完成形 (表面 _front / 裏面 _back, PNG)
-├── steps/                # 各作品の折り順一覧画像 (PNG)
-└── animations/           # 折りたたみアニメーション (GIF)
+├── index.html                # デモページ本体
+├── 2d/                       # 平面に折りたためる作品 (3d/ は立体の作品で同じ構成)
+│   ├── crease_patterns/      # 各作品の展開図 (PNG)
+│   ├── finished/             # 各作品の完成形 (表面 _front / 裏面 _back, PNG)
+│   ├── steps/                # 各作品の折り順一覧画像 ({id}_fold.png)
+│   │   └── {id}/             # 工程ごとの詳細 (コマ画像 NN.png・工程のアニメーション NN.gif・steps.json)
+│   └── animations/           # 折りたたみアニメーション (GIF)
+└── 3d/
 ```
+
+折り順・アニメーション・工程ごとの詳細は、生成側のリポジトリで `python export_demo.py` を実行すると作り直してここへコピーされる(展開図・完成形の画像は対象外)。
+作品ページの「工程を詳しく見る」から `#{id}/steps` を開くと、`steps/{id}/steps.json` を読んで工程をカードで並べる。
+`steps.json` は fetch で読むため、ファイルを直接開くのではなく GitHub Pages か `python -m http.server` などのサーバー経由で表示する。
 
 ## デモページ
 
