@@ -1,0 +1,35 @@
+{
+ "name": "flower",
+ "steps": [
+  {
+   "n": 1,
+   "label": "谷折り",
+   "text": "半分に折る。",
+   "image": "01.png",
+   "animation": "01.gif",
+   "duration": 1900
+  },
+  {
+   "n": 2,
+   "label": "谷折り",
+   "text": "上へ折り上げる。",
+   "image": "02.png",
+   "animation": "02.gif",
+   "duration": 1900
+  },
+  {
+   "n": 3,
+   "label": "谷折り",
+   "text": "左へ折る。",
+   "image": "03.png",
+   "animation": "03.gif",
+   "duration": 1900
+  },
+  {
+   "n": null,
+   "label": "できあがり",
+   "text": "できあがり",
+   "image": "finish.png"
+  }
+ ]
+}

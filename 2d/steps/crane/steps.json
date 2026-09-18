@@ -1,0 +1,115 @@
+{
+ "name": "crane_2d_2wings",
+ "steps": [
+  {
+   "n": 1,
+   "label": "谷折り",
+   "text": "半分に折る。",
+   "image": "01.png",
+   "animation": "01.gif",
+   "duration": 1900
+  },
+  {
+   "n": 2,
+   "label": "折り筋をつける",
+   "text": "半分に折って折り筋をつける。",
+   "image": "02.png"
+  },
+  {
+   "n": 3,
+   "label": "袋折り（四角）",
+   "text": "左下の袋を開いて四角につぶす。",
+   "image": "03.png",
+   "animation": "03.gif",
+   "duration": 1900
+  },
+  {
+   "n": 4,
+   "label": "袋折り（四角）",
+   "text": "左下の袋を開いて四角につぶす。",
+   "image": "04.png",
+   "animation": "04.gif",
+   "duration": 1900
+  },
+  {
+   "n": 5,
+   "label": "花弁折り",
+   "text": "上の1枚を開きながら左右を折り込む。裏側も同じように折る。",
+   "image": "05.png",
+   "animation": "05.gif",
+   "duration": 3800
+  },
+  {
+   "n": 6,
+   "label": "谷折り",
+   "text": "中心線に合わせて折る。裏側も同じように折る。",
+   "image": "06.png",
+   "animation": "06.gif",
+   "duration": 3800
+  },
+  {
+   "n": 7,
+   "label": "谷折り",
+   "text": "中心線に合わせて折る。裏側も同じように折る。",
+   "image": "07.png",
+   "animation": "07.gif",
+   "duration": 3800
+  },
+  {
+   "n": 8,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "08.png"
+  },
+  {
+   "n": 9,
+   "label": "中割り折り",
+   "text": "折り筋で中に割り込ませて折る。",
+   "image": "09.png",
+   "animation": "09.gif",
+   "duration": 1900
+  },
+  {
+   "n": 10,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "10.png"
+  },
+  {
+   "n": 11,
+   "label": "中割り折り",
+   "text": "折り筋で中に割り込ませて折る。",
+   "image": "11.png",
+   "animation": "11.gif",
+   "duration": 1900
+  },
+  {
+   "n": 12,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "12.png"
+  },
+  {
+   "n": 13,
+   "label": "中割り折り",
+   "text": "折り筋で中に割り込ませて折る。",
+   "image": "13.png",
+   "animation": "13.gif",
+   "duration": 1900
+  },
+  {
+   "n": 14,
+   "label": "谷折り",
+   "text": "左下へ折る。裏側も同じように折る。",
+   "image": "14.png",
+   "animation": "14.gif",
+   "duration": 3800
+  },
+  {
+   "n": null,
+   "label": "できあがり",
+   "text": "できあがり",
+   "image": "finish.png"
+  }
+ ]
+}

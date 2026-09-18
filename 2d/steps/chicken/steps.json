@@ -1,0 +1,63 @@
+{
+ "name": "chicken",
+ "steps": [
+  {
+   "n": 1,
+   "label": "谷折り",
+   "text": "半分に折る。",
+   "image": "01.png",
+   "animation": "01.gif",
+   "duration": 1900
+  },
+  {
+   "n": 2,
+   "label": "山折り",
+   "text": "折り目に合わせて後ろへ折る。裏側も同じように折る。",
+   "image": "02.png",
+   "animation": "02.gif",
+   "duration": 3800
+  },
+  {
+   "n": 3,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "03.png"
+  },
+  {
+   "n": 4,
+   "label": "中割り折り",
+   "text": "折り筋で中に割り込ませて折る。",
+   "image": "04.png",
+   "animation": "04.gif",
+   "duration": 1900
+  },
+  {
+   "n": 5,
+   "label": "山折り",
+   "text": "後ろへ折る。",
+   "image": "05.png",
+   "animation": "05.gif",
+   "duration": 1900
+  },
+  {
+   "n": 6,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "06.png"
+  },
+  {
+   "n": 7,
+   "label": "かぶせ折り",
+   "text": "折り筋で外側にかぶせて折る。",
+   "image": "07.png",
+   "animation": "07.gif",
+   "duration": 1900
+  },
+  {
+   "n": null,
+   "label": "できあがり",
+   "text": "できあがり",
+   "image": "finish.png"
+  }
+ ]
+}

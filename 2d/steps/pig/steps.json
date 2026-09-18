@@ -1,0 +1,115 @@
+{
+ "name": "pig",
+ "steps": [
+  {
+   "n": 1,
+   "label": "折り筋をつける",
+   "text": "半分に折って折り筋をつける。",
+   "image": "01.png"
+  },
+  {
+   "n": 2,
+   "label": "谷折り",
+   "text": "中心線に合わせて折る。",
+   "image": "02.png",
+   "animation": "02.gif",
+   "duration": 1900
+  },
+  {
+   "n": 3,
+   "label": "谷折り",
+   "text": "中心線に合わせて折る。",
+   "image": "03.png",
+   "animation": "03.gif",
+   "duration": 1900
+  },
+  {
+   "n": 4,
+   "label": "山折り",
+   "text": "半分を後ろへ折る。",
+   "image": "04.png",
+   "animation": "04.gif",
+   "duration": 1900
+  },
+  {
+   "n": 5,
+   "label": "袋折り（三角）",
+   "text": "右下の袋を開いて三角につぶす。裏側も同じように折る。",
+   "image": "05.png",
+   "animation": "05.gif",
+   "duration": 3800
+  },
+  {
+   "n": 6,
+   "label": "袋折り（三角）",
+   "text": "右上の袋を開いて三角につぶす。裏側も同じように折る。",
+   "image": "06.png",
+   "animation": "06.gif",
+   "duration": 3800
+  },
+  {
+   "n": 7,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "07.png"
+  },
+  {
+   "n": 8,
+   "label": "中割り折り",
+   "text": "折り筋で中に割り込ませて折る。",
+   "image": "08.png",
+   "animation": "08.gif",
+   "duration": 1900
+  },
+  {
+   "n": 9,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "09.png"
+  },
+  {
+   "n": 10,
+   "label": "中割り折り",
+   "text": "折り筋で中に割り込ませて折る。",
+   "image": "10.png",
+   "animation": "10.gif",
+   "duration": 1900
+  },
+  {
+   "n": 11,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "11.png"
+  },
+  {
+   "n": 12,
+   "label": "中割り折り",
+   "text": "折り筋で中に割り込ませて折る。",
+   "image": "12.png",
+   "animation": "12.gif",
+   "duration": 1900
+  },
+  {
+   "n": 13,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。裏側も同じように折る。",
+   "image": "13.png",
+   "animation": "13.gif",
+   "duration": 3800
+  },
+  {
+   "n": 14,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。裏側も同じように折る。",
+   "image": "14.png",
+   "animation": "14.gif",
+   "duration": 3800
+  },
+  {
+   "n": null,
+   "label": "できあがり",
+   "text": "できあがり",
+   "image": "finish.png"
+  }
+ ]
+}

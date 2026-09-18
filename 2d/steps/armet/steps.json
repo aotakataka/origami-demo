@@ -1,0 +1,91 @@
+{
+ "name": "armet",
+ "steps": [
+  {
+   "n": 1,
+   "label": "谷折り",
+   "text": "半分に折る。",
+   "image": "01.png",
+   "animation": "01.gif",
+   "duration": 1900
+  },
+  {
+   "n": 2,
+   "label": "谷折り",
+   "text": "左上へ折る。",
+   "image": "02.png",
+   "animation": "02.gif",
+   "duration": 1900
+  },
+  {
+   "n": 3,
+   "label": "山折り",
+   "text": "後ろへ折る。",
+   "image": "03.png",
+   "animation": "03.gif",
+   "duration": 1900
+  },
+  {
+   "n": 4,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "04.png",
+   "animation": "04.gif",
+   "duration": 1900
+  },
+  {
+   "n": 5,
+   "label": "山折り",
+   "text": "後ろへ折る。",
+   "image": "05.png",
+   "animation": "05.gif",
+   "duration": 1900
+  },
+  {
+   "n": 6,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "06.png",
+   "animation": "06.gif",
+   "duration": 1900
+  },
+  {
+   "n": 7,
+   "label": "谷折り",
+   "text": "右下へ折る。",
+   "image": "07.png",
+   "animation": "07.gif",
+   "duration": 1900
+  },
+  {
+   "n": 8,
+   "label": "谷折り",
+   "text": "左下へ折る。",
+   "image": "08.png",
+   "animation": "08.gif",
+   "duration": 1900
+  },
+  {
+   "n": 9,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "09.png",
+   "animation": "09.gif",
+   "duration": 1900
+  },
+  {
+   "n": 10,
+   "label": "山折り",
+   "text": "角を角に合わせて後ろへ折る。",
+   "image": "10.png",
+   "animation": "10.gif",
+   "duration": 1900
+  },
+  {
+   "n": null,
+   "label": "できあがり",
+   "text": "できあがり",
+   "image": "finish.png"
+  }
+ ]
+}

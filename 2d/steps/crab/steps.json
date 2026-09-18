@@ -1,0 +1,113 @@
+{
+ "name": "crab",
+ "steps": [
+  {
+   "n": 1,
+   "label": "折り筋をつける",
+   "text": "半分に折って折り筋をつける。",
+   "image": "01.png"
+  },
+  {
+   "n": 2,
+   "label": "谷折り",
+   "text": "中心線に合わせて折る。",
+   "image": "02.png",
+   "animation": "02.gif",
+   "duration": 1900
+  },
+  {
+   "n": 3,
+   "label": "谷折り",
+   "text": "中心線に合わせて折る。",
+   "image": "03.png",
+   "animation": "03.gif",
+   "duration": 1900
+  },
+  {
+   "n": 4,
+   "label": "袋折り（両開き）",
+   "text": "上の袋を開いて左右につぶす。",
+   "image": "04.png",
+   "animation": "04.gif",
+   "duration": 1900
+  },
+  {
+   "n": 5,
+   "label": "袋折り（両開き）",
+   "text": "下の袋を開いて左右につぶす。",
+   "image": "05.png",
+   "animation": "05.gif",
+   "duration": 1900
+  },
+  {
+   "n": 6,
+   "label": "谷折り",
+   "text": "左下へ折る。",
+   "image": "06.png",
+   "animation": "06.gif",
+   "duration": 1900
+  },
+  {
+   "n": 7,
+   "label": "谷折り",
+   "text": "上へ折り上げる。",
+   "image": "07.png",
+   "animation": "07.gif",
+   "duration": 1900
+  },
+  {
+   "n": 8,
+   "label": "谷折り",
+   "text": "右下へ折る。",
+   "image": "08.png",
+   "animation": "08.gif",
+   "duration": 1900
+  },
+  {
+   "n": 9,
+   "label": "谷折り",
+   "text": "上へ折り上げる。",
+   "image": "09.png",
+   "animation": "09.gif",
+   "duration": 1900
+  },
+  {
+   "n": 10,
+   "label": "谷折り",
+   "text": "下へ折り下げる。",
+   "image": "10.png",
+   "animation": "10.gif",
+   "duration": 1900
+  },
+  {
+   "n": 11,
+   "label": "谷折り",
+   "text": "下へ折り下げる。",
+   "image": "11.png",
+   "animation": "11.gif",
+   "duration": 1900
+  },
+  {
+   "n": 12,
+   "label": "谷折り",
+   "text": "下へ折り下げる。",
+   "image": "12.png",
+   "animation": "12.gif",
+   "duration": 1900
+  },
+  {
+   "n": 13,
+   "label": "裏返す",
+   "text": "裏返す。",
+   "image": "13.png",
+   "animation": "13.gif",
+   "duration": 1400
+  },
+  {
+   "n": null,
+   "label": "できあがり",
+   "text": "できあがり",
+   "image": "finish.png"
+  }
+ ]
+}
