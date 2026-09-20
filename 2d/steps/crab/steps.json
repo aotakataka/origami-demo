@@ -42,7 +42,7 @@
   {
    "n": 6,
    "label": "谷折り",
-   "text": "左下へ折る。",
+   "text": "右下へ折る。",
    "image": "06.png",
    "animation": "06.gif",
    "duration": 1900
@@ -50,7 +50,7 @@
   {
    "n": 7,
    "label": "谷折り",
-   "text": "上へ折り上げる。",
+   "text": "左下へ折る。",
    "image": "07.png",
    "animation": "07.gif",
    "duration": 1900
@@ -58,7 +58,7 @@
   {
    "n": 8,
    "label": "谷折り",
-   "text": "右下へ折る。",
+   "text": "上へ折り上げる。",
    "image": "08.png",
    "animation": "08.gif",
    "duration": 1900
