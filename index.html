@@ -462,7 +462,8 @@ var WORKS = [
   { id: "crane",       name: "鶴" },
   { id: "chicken",     name: "にわとり" },
   { id: "flower",      name: "花" },
-  { id: "pig",         name: "ブタ" }
+  { id: "pig",         name: "ブタ" },
+  { id: "yakko",       name: "やっこさん", pending: true }
 ];
 
 /* 立体形状の作品（3D） */
@@ -714,6 +715,15 @@ function renderSteps(works, i, is3d) {
     '</article>';
   tabsWrap.style.display = "none";
   var body = document.getElementById("stepsBody");
+
+  /* 折り順がまだない作品は、工程の代わりに準備中の絵を出す */
+  if (w.pending) {
+    body.innerHTML =
+      '<p class="steps-meta">折り順は準備中です。</p>' +
+      '<div class="img-wrap"><img src="' + dir + 'pending.png" alt="準備中"></div>' +
+      '<nav class="pager">' + back + '<span></span></nav>';
+    return;
+  }
 
   fetch(dir + "steps.json")
     .then(function (res) {
