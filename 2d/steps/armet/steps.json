@@ -59,8 +59,8 @@
   },
   {
    "n": 8,
-   "label": "谷折り",
-   "text": "左下へ折る。",
+   "label": "山折り",
+   "text": "角を角に合わせて後ろへ折る。",
    "image": "08.png",
    "animation": "08.gif",
    "duration": 1900
@@ -68,15 +68,15 @@
   {
    "n": 9,
    "label": "谷折り",
-   "text": "折り目に合わせて折る。",
+   "text": "左下へ折る。",
    "image": "09.png",
    "animation": "09.gif",
    "duration": 1900
   },
   {
    "n": 10,
-   "label": "山折り",
-   "text": "角を角に合わせて後ろへ折る。",
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
    "image": "10.png",
    "animation": "10.gif",
    "duration": 1900
