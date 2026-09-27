@@ -11,14 +11,16 @@
   },
   {
    "n": 2,
-   "label": "折り筋をつける",
-   "text": "半分に折って折り筋をつける。",
-   "image": "02.png"
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "02.png",
+   "animation": "02.gif",
+   "duration": 1900
   },
   {
    "n": 3,
    "label": "谷折り",
-   "text": "中心線に合わせて折る。",
+   "text": "折り目に合わせて折る。",
    "image": "03.png",
    "animation": "03.gif",
    "duration": 1900
@@ -26,7 +28,7 @@
   {
    "n": 4,
    "label": "谷折り",
-   "text": "中心線に合わせて折る。",
+   "text": "右上へ折る。",
    "image": "04.png",
    "animation": "04.gif",
    "duration": 1900
@@ -57,8 +59,8 @@
   },
   {
    "n": 8,
-   "label": "谷折り",
-   "text": "右上へ折る。",
+   "label": "山折り",
+   "text": "後ろへ折る。",
    "image": "08.png",
    "animation": "08.gif",
    "duration": 1900
@@ -66,17 +68,9 @@
   {
    "n": 9,
    "label": "山折り",
-   "text": "後ろへ折る。",
+   "text": "折り目に合わせて後ろへ折る。",
    "image": "09.png",
    "animation": "09.gif",
-   "duration": 1900
-  },
-  {
-   "n": 10,
-   "label": "山折り",
-   "text": "折り目に合わせて後ろへ折る。",
-   "image": "10.png",
-   "animation": "10.gif",
    "duration": 1900
   },
   {

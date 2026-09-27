@@ -12,62 +12,62 @@
   {
    "n": 2,
    "label": "折り筋をつける",
-   "text": "半分に折って折り筋をつける。",
+   "text": "谷折りして折り筋をつける。",
    "image": "02.png"
   },
   {
    "n": 3,
    "label": "袋折り（四角）",
-   "text": "左下の袋を開いて四角につぶす。",
+   "text": "折り筋で左下の袋を開いて四角につぶす。",
    "image": "03.png",
    "animation": "03.gif",
    "duration": 1900
   },
   {
    "n": 4,
-   "label": "袋折り（四角）",
-   "text": "左下の袋を開いて四角につぶす。",
+   "label": "裏返す",
+   "text": "裏返す。",
    "image": "04.png",
    "animation": "04.gif",
-   "duration": 1900
+   "duration": 1400
   },
   {
    "n": 5,
-   "label": "花弁折り",
-   "text": "上の1枚を開きながら左右を折り込む。裏側も同じように折る。",
+   "label": "袋折り（四角）",
+   "text": "右下の袋を開いて四角につぶす。",
    "image": "05.png",
    "animation": "05.gif",
-   "duration": 3800
+   "duration": 1900
   },
   {
    "n": 6,
-   "label": "谷折り",
-   "text": "中心線に合わせて折る。裏側も同じように折る。",
-   "image": "06.png",
-   "animation": "06.gif",
-   "duration": 3800
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "06.png"
   },
   {
    "n": 7,
-   "label": "谷折り",
-   "text": "中心線に合わせて折る。裏側も同じように折る。",
+   "label": "花弁折り",
+   "text": "折り筋で上の1枚を開きながら左右を折り込む。裏側も同じように折る。",
    "image": "07.png",
    "animation": "07.gif",
    "duration": 3800
   },
   {
    "n": 8,
-   "label": "折り筋をつける",
-   "text": "谷折りして折り筋をつける。",
-   "image": "08.png"
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。裏側も同じように折る。",
+   "image": "08.png",
+   "animation": "08.gif",
+   "duration": 3800
   },
   {
    "n": 9,
-   "label": "中割り折り",
-   "text": "折り筋で中に割り込ませて折る。",
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。裏側も同じように折る。",
    "image": "09.png",
    "animation": "09.gif",
-   "duration": 1900
+   "duration": 3800
   },
   {
    "n": 10,
@@ -99,10 +99,24 @@
   },
   {
    "n": 14,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "14.png"
+  },
+  {
+   "n": 15,
+   "label": "中割り折り",
+   "text": "折り筋で中に割り込ませて折る。",
+   "image": "15.png",
+   "animation": "15.gif",
+   "duration": 1900
+  },
+  {
+   "n": 16,
    "label": "谷折り",
-   "text": "左下へ折る。裏側も同じように折る。",
-   "image": "14.png",
-   "animation": "14.gif",
+   "text": "右下へ折る。裏側も同じように折る。",
+   "image": "16.png",
+   "animation": "16.gif",
    "duration": 3800
   },
   {

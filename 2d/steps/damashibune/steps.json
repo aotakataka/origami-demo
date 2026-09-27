@@ -10,7 +10,7 @@
   {
    "n": 2,
    "label": "谷折り",
-   "text": "中心線に合わせて折る。",
+   "text": "折り目に合わせて折る。",
    "image": "02.png",
    "animation": "02.gif",
    "duration": 1900
@@ -18,49 +18,61 @@
   {
    "n": 3,
    "label": "谷折り",
-   "text": "中心線に合わせて折る。",
+   "text": "折り目に合わせて折る。",
    "image": "03.png",
    "animation": "03.gif",
    "duration": 1900
   },
   {
    "n": 4,
-   "label": "袋折り（両開き）",
-   "text": "右の袋を開いて左右につぶす。",
-   "image": "04.png",
-   "animation": "04.gif",
-   "duration": 1900
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "04.png"
   },
   {
    "n": 5,
    "label": "袋折り（両開き）",
-   "text": "左の袋を開いて左右につぶす。",
+   "text": "折り筋で右の袋を開いて左右につぶす。",
    "image": "05.png",
    "animation": "05.gif",
    "duration": 1900
   },
   {
    "n": 6,
-   "label": "谷折り",
-   "text": "中心線に合わせて折る。",
-   "image": "06.png",
-   "animation": "06.gif",
-   "duration": 1900
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "06.png"
   },
   {
    "n": 7,
-   "label": "谷折り",
-   "text": "中心線に合わせて折る。",
+   "label": "袋折り（両開き）",
+   "text": "折り筋で左の袋を開いて左右につぶす。",
    "image": "07.png",
    "animation": "07.gif",
    "duration": 1900
   },
   {
    "n": 8,
-   "label": "山折り",
-   "text": "辺を辺に合わせて後ろへ折る。",
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
    "image": "08.png",
    "animation": "08.gif",
+   "duration": 1900
+  },
+  {
+   "n": 9,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "09.png",
+   "animation": "09.gif",
+   "duration": 1900
+  },
+  {
+   "n": 10,
+   "label": "山折り",
+   "text": "辺を辺に合わせて後ろへ折る。",
+   "image": "10.png",
+   "animation": "10.gif",
    "duration": 1900
   },
   {
