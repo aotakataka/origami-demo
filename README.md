@@ -3,20 +3,6 @@
 逆方向探索による折り紙の折り順自動生成のデモページです。
 展開図から完成形までの折り順を自動で生成し、各作品の**展開図**・**完成形**・**折り順**・**折りたたみアニメーション**を確認できます。
 
-## ディレクトリ構成
-
-```
-origami-demo/
-├── index.html                # デモページ本体
-├── 2d/                       # 平面に折りたためる作品 (3d/ は立体の作品で同じ構成)
-│   ├── crease_patterns/      # 各作品の展開図 (PNG)
-│   ├── finished/             # 各作品の完成形 (表面 _front / 裏面 _back, PNG)
-│   ├── steps/                # 各作品の折り順一覧画像 ({id}_fold.png)
-│   │   └── {id}/             # 工程ごとの詳細 (コマ画像 NN.png・工程のアニメーション NN.gif・steps.json)
-│   └── animations/           # 折りたたみアニメーション (GIF)
-└── 3d/
-```
-
 ## デモページ
 
 https://aotakataka.github.io/origami-demo/
