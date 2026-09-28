@@ -232,6 +232,7 @@ main { padding: 2.5rem 0 4rem; }
 .img-wrap { text-align: center; }
 .img-wrap img { max-width: 100%; height: auto; border-radius: 4px; }
 .img-wrap.cp img { max-width: min(320px, 60%); }
+.img-wrap.sheet img { width: 100%; }
 
 .img-wrap.dual { display: flex; gap: 1rem; justify-content: center; align-items: flex-end; }
 .img-wrap.dual figure { flex: 1 1 50%; display: flex; flex-direction: column; align-items: center; }
@@ -392,6 +393,8 @@ footer a:hover { text-decoration: underline; }
 
 @media (max-width: 640px) {
   .steps-grid { grid-template-columns: 1fr; }
+  .img-wrap.sheet { overflow-x: auto; }
+  .img-wrap.sheet img { width: auto; max-width: none; height: 50vh; }
 }
 @media (max-width: 480px) {
   .page-header { padding: 2rem 1rem 1rem; }
@@ -663,7 +666,7 @@ function renderDetail(works, i, is3d) {
 
   html +=
     '<div class="content-block"><h3>折り順</h3>' +
-      '<div class="img-wrap"><img src="' + base + 'steps/' + w.id + '_fold.png" alt="' + w.name + 'の折り順"></div>' +
+      '<div class="img-wrap"><img src="' + base + 'steps/' + w.id + '/fold.png" alt="' + w.name + 'の折り順"></div>' +
       '<div class="legend cp-legend">' +
         '<span class="legend-item"><span class="legend-swatch front"></span> 表面</span>' +
         '<span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>' +
@@ -754,6 +757,14 @@ function renderSteps(works, i, is3d) {
               : '') +
           '</li>';
         }).join("") + '</ol>' +
+        '<div class="content-block"><h3>折り順（全体）</h3>' +
+          '<div class="img-wrap sheet"><img src="' + dir + 'fold_text.png" alt="' + esc(w.name) + 'の折り順（全工程）" loading="lazy"></div>' +
+          '<div class="legend cp-legend">' +
+            '<span class="legend-item"><span class="legend-swatch front"></span> 表面</span>' +
+            '<span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>' +
+            '<span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>' +
+          '</div>' +
+        '</div>' +
         '<nav class="pager">' + back + '<span></span></nav>';
     })
     .catch(function () {
