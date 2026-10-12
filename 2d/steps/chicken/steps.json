@@ -33,38 +33,26 @@
   },
   {
    "n": 5,
-   "label": "折り筋をつける",
-   "text": "谷折りして折り筋をつける。",
-   "image": "05.png"
+   "label": "中割り折り",
+   "text": "中に割り込ませて折る。",
+   "image": "05.png",
+   "animation": "05.gif",
+   "duration": 1900
   },
   {
    "n": 6,
-   "label": "中割り折り",
-   "text": "折り筋で中に割り込ませて折る。",
+   "label": "山折り",
+   "text": "後ろへ折る。",
    "image": "06.png",
    "animation": "06.gif",
    "duration": 1900
   },
   {
    "n": 7,
-   "label": "山折り",
-   "text": "後ろへ折る。",
+   "label": "かぶせ折り",
+   "text": "外側にかぶせて折る。",
    "image": "07.png",
    "animation": "07.gif",
-   "duration": 1900
-  },
-  {
-   "n": 8,
-   "label": "折り筋をつける",
-   "text": "谷折りして折り筋をつける。",
-   "image": "08.png"
-  },
-  {
-   "n": 9,
-   "label": "かぶせ折り",
-   "text": "折り筋で外側にかぶせて折る。",
-   "image": "09.png",
-   "animation": "09.gif",
    "duration": 1900
   },
   {
