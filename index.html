@@ -501,7 +501,7 @@ document.getElementById("tabs").addEventListener("click", function (e) {
 /* 一覧：完成形をサムネイルに */
 function renderIndex(el, works, is3d) {
   el.innerHTML = works.map(function (w) {
-    var src = (is3d ? "3d/" : "2d/") + "finished/" + w.id + "_front.png";
+    var src = is3d ? "3d/finished/" + w.id + ".png" : "2d/finished/" + w.id + "_front.png";
     var alt = w.name + "の完成形";
     return '<li>' +
       '<a class="card" href="' + hashOf(w, is3d) + '">' +
@@ -655,7 +655,7 @@ function renderDetail(works, i, is3d) {
   /* 完成形：2D は表裏の 2 枚、3D は立体形状の 1 枚 */
   html += '<div class="content-block"><h3>完成形</h3>';
   if (is3d) {
-    html += '<div class="img-wrap"><img src="' + base + 'finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（立体）"></div>';
+    html += '<div class="img-wrap"><img src="' + base + 'finished/' + w.id + '.png" alt="' + w.name + 'の完成形（立体）"></div>';
   } else {
     html +=
       '<div class="img-wrap dual">' +
