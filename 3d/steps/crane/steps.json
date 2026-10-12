@@ -120,6 +120,14 @@
    "duration": 3800
   },
   {
+   "n": 17,
+   "label": "形を整える",
+   "text": "広げて形を整える。",
+   "image": "17.png",
+   "animation": "17.gif",
+   "duration": 1950
+  },
+  {
    "n": null,
    "label": "できあがり",
    "text": "できあがり",
