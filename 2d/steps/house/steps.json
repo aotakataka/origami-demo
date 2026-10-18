@@ -40,7 +40,7 @@
   {
    "n": 6,
    "label": "谷折り",
-   "text": "辺を辺に合わせて折る。",
+   "text": "辺に合わせて折る。",
    "image": "06.png",
    "animation": "06.gif",
    "duration": 1900

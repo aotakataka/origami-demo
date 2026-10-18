@@ -70,7 +70,7 @@
   {
    "n": 10,
    "label": "山折り",
-   "text": "辺を辺に合わせて後ろへ折る。",
+   "text": "辺に合わせて後ろへ折る。",
    "image": "10.png",
    "animation": "10.gif",
    "duration": 1900
