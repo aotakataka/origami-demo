@@ -81,5 +81,9 @@
    "text": "できあがり",
    "image": "finish.png"
   }
- ]
+ ],
+ "source": {
+  "commit": "ca8784de8e444af88dabec724e8754dba9e09f20",
+  "modified": false
+ }
 }
