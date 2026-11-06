@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>逆方向探索による折り紙の折り順自動生成 — 生成例</title>
+<meta name="description" content="展開図から折り紙の折り順を自動で生成した例を集めたページです。鶴・やっこさん・兜など14作品の展開図・完成形・折り順・折りたたみアニメーションを見られます。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:site_name" content="折り紙の折り順自動生成">
+<meta property="og:title" content="逆方向探索による折り紙の折り順自動生成 — 生成例">
+<meta property="og:description" content="展開図から折り紙の折り順を自動で生成した例を集めたページです。展開図・完成形・折り順・折りたたみアニメーションを見られます。">
+<meta property="og:url" content="https://aotakataka.github.io/origami-demo/">
+<meta property="og:image" content="https://aotakataka.github.io/origami-demo/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="折り順を自動生成した作品の完成形（鶴・やっこさん・兜・風車・ハート・ブタ）">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+:root {
+  --bg: #F7F5F0;
+  --bg-card: #FFFFFF;
+  --text: #2A2A2A;
+  --text-sub: #6B6560;
+  --border: #D8D3CC;
+  --accent: #B8963E;
+  --mountain: #C84B4B;
+  --valley: #4B7EC8;
+  --fold-line: #C84B4B;
+  --back-green: #B4E5A2;
+  --shadow: rgba(58, 50, 40, 0.08);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1C1B19;
+    --bg-card: #26251F;
+    --text: #E8E4DC;
+    --text-sub: #9E978E;
+    --border: #3E3B34;
+    --accent: #D4AE4E;
+    --mountain: #E06060;
+    --valley: #6A9EE0;
+    --fold-line: #E06060;
+    --back-green: #7DAF6A;
+    --shadow: rgba(0, 0, 0, 0.3);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Hiragino Kaku Gothic ProN", "Meiryo", "Noto Sans JP", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 56rem; margin: 0 auto; padding: 0 1.5rem; }
+
+/* ---------- header ---------- */
+.page-header { padding: 3rem 1.5rem 1.5rem; text-align: center; }
+.page-header h1 {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-wrap: balance;
+  line-height: 1.4;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.home-link { color: inherit; text-decoration: none; }
+.page-header .desc {
+  margin: 1rem auto 0;
+  font-size: 0.95rem;
+  color: var(--text-sub);
+  max-width: 40rem;
+}
+
+/* ---------- legends ---------- */
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--text-sub);
+}
+.legend.page-legend {
+  padding: 1rem 1.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.legend.cp-legend {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.legend-item { display: flex; align-items: center; gap: 0.4rem; }
+.legend-swatch {
+  width: 14px; height: 14px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+.legend-swatch.front { background: #fff; }
+.legend-swatch.back  { background: var(--back-green); }
+.legend-swatch.line  { background: transparent; border: 1px dashed var(--fold-line); }
+.legend-rule {
+  width: 20px; height: 0;
+  border-top: 2px solid currentColor;
+}
+.legend-rule.mtn { color: var(--mountain); }
+.legend-rule.val { color: var(--valley); }
+
+/* ---------- tabs ---------- */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 2rem;
+}
+.tab-btn {
+  padding: 0.6rem 1.8rem;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-sub);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active {
+  color: var(--accent);
+}
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -2px;
+  height: 2px;
+  background: var(--accent);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.tab-empty {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-sub);
+  font-size: 0.95rem;
+}
+
+/* ---------- index grid ---------- */
+main { padding: 2.5rem 0 4rem; }
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  list-style: none;
+}
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 4px var(--shadow);
+  transition: border-color 0.2s, transform 0.2s;
+}
+.card:hover, .card:focus-visible {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  outline: none;
+}
+.card:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+.card .thumb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4%;
+}
+.card .thumb img,
+.card .thumb canvas {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+.card .name {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ---------- detail ---------- */
+.backlink {
+  display: inline-block;
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  text-decoration: none;
+  padding: 0.3rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  transition: border-color 0.2s, color 0.2s;
+}
+.backlink:hover, .backlink:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+
+.detail h2 {
+  font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 1.5rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent);
+  display: block;
+}
+
+.content-block {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+.content-block h3 {
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: var(--text-sub);
+  margin-bottom: 1rem;
+}
+.img-wrap { text-align: center; }
+.img-wrap img { max-width: 100%; height: auto; border-radius: 4px; }
+.img-wrap.cp img { max-width: min(320px, 60%); }
+.img-wrap.sheet img { width: 100%; }
+.zoom-link { display: inline-block; cursor: zoom-in; }
+.zoom-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.zoom-hint {
+  display: none;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-sub);
+  text-align: center;
+}
+
+.img-wrap.dual { display: flex; gap: 1rem; justify-content: center; align-items: flex-end; }
+.img-wrap.dual figure { flex: 1 1 50%; display: flex; flex-direction: column; align-items: center; }
+.img-wrap.dual img { width: 100%; max-width: 200px; aspect-ratio: 1 / 1; object-fit: contain; }
+.img-wrap.dual figcaption { font-size: 0.8rem; color: var(--text-sub); margin-top: 0.5rem; }
+
+/* ---------- animation controls ---------- */
+.anim-controls {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+.anim-btn {
+  padding: 0.4rem 1.2rem;
+  border: 1px solid var(--border);
+  border-radius: 2rem;
+  background: transparent;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.anim-btn:hover, .anim-btn:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.anim-btn[disabled] { opacity: 0.4; cursor: default; }
+.anim-btn[disabled]:hover { border-color: var(--border); color: var(--text); }
+
+.anim-stage {
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.anim-stage img,
+.anim-stage canvas,
+.anim-stage video { max-width: 100%; height: auto; border-radius: 4px; display: block; background: #fff; }
+.anim-stage .placeholder { font-size: 0.85rem; color: var(--text-sub); }
+.anim-stage video,
+.step-card.has-anim .step-figure { cursor: pointer; }
+.anim-seek {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-sub);
+  font-variant-numeric: tabular-nums;
+}
+.anim-seek input[type="range"] { flex: 1; min-width: 0; accent-color: var(--accent); }
+.anim-seek input[disabled] { opacity: 0.4; }
+
+/* ---------- pager ---------- */
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.85rem;
+  padding-top: 0.5rem;
+}
+.pager a { color: var(--text); text-decoration: none; }
+.pager a:hover, .pager a:focus-visible { color: var(--accent); }
+
+/* ---------- steps ---------- */
+.more-link {
+  display: block;
+  width: fit-content;
+  margin: 1.25rem auto 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 0.45rem 1.4rem;
+  border: 1px solid var(--accent);
+  border-radius: 2rem;
+  transition: background 0.2s, color 0.2s;
+}
+.more-link:hover, .more-link:focus-visible {
+  background: var(--accent);
+  color: var(--bg-card);
+  outline: none;
+}
+.steps-meta {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  margin: -0.75rem 0 1.25rem;
+}
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 1px 4px var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.step-figure {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  padding: 4%;
+}
+.step-figure img,
+.step-figure video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  background: #fff;
+}
+.step-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+.step-num {
+  flex: none;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  border-radius: 1rem;
+  background: var(--accent);
+  color: var(--bg-card);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.step-kind {
+  font-size: 0.75rem;
+  color: var(--text-sub);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.05rem 0.6rem;
+}
+.step-text {
+  margin-top: 0.5rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.step-card .anim-btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+.step-text + .anim-btn { margin-top: 0.8rem; }
+.step-card.finish .step-text { font-weight: 600; }
+
+footer {
+  max-width: 56rem;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-sub);
+  border-top: 1px solid var(--border);
+}
+footer .author { margin-top: 0.4rem; }
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+@media (max-width: 640px) {
+  .steps-grid { grid-template-columns: 1fr; }
+  .zoom-hint { display: block; }
+  .img-wrap.sheet { overflow-x: auto; }
+  .img-wrap.sheet img { width: auto; max-width: none; height: 50vh; }
+}
+@media (max-width: 480px) {
+  .page-header { padding: 2rem 1rem 1rem; }
+  .wrap { padding: 0 1rem; }
+  .img-wrap.cp img { max-width: 80%; }
+  .tab-btn { padding: 0.5rem 1.2rem; font-size: 0.85rem; }
+
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+  .card {
+    padding: 0.5rem;
+  }
+  .card .name {
+    margin-top: 0.3rem;
+    font-size: 0.75rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1><a class="home-link" href="#">逆方向探索による<wbr>折り紙の折り順自動生成</a></h1>
+  <p class="desc">
+    展開図から完成形の折り順を自動で生成しています。<br>
+    作品を選ぶと、展開図・完成形・折り順・折りたたみアニメーションを確認できます。
+  </p>
+</header>
+
+
+<main class="wrap">
+  <div id="tabsWrap">
+    <div class="tabs" id="tabs" role="tablist" aria-label="作品の種類">
+      <button type="button" class="tab-btn active" id="tab-2d" data-tab="2d" role="tab" aria-selected="true" aria-controls="panel-2d">2D</button>
+      <button type="button" class="tab-btn" id="tab-3d" data-tab="3d" role="tab" aria-selected="false" aria-controls="panel-3d" tabindex="-1">3D</button>
+    </div>
+    <div class="tab-panel active" id="panel-2d" role="tabpanel" aria-labelledby="tab-2d">
+      <ul class="grid" id="index"></ul>
+    </div>
+    <div class="tab-panel" id="panel-3d" role="tabpanel" aria-labelledby="tab-3d">
+      <ul class="grid" id="index3d"></ul>
+      <div class="tab-empty" id="empty3d" hidden>準備中</div>
+    </div>
+  </div>
+  <div id="detail"></div>
+</main>
+
+<footer>
+  <p>逆方向探索による折り紙の折り順自動生成</p>
+  <p class="author">Contact: <a href="mailto:aotaka@toki.waseda.jp">aotaka@toki.waseda.jp</a></p>
+  <p class="author">© 2026 aotakataka</p>
+</footer>
+
+<script>
+/* 平面に折りたためる作品（2D）。並びは作品名の五十音順 */
+var WORKS = [
+  { id: "house",       name: "家" },
+  { id: "dogface",     name: "犬の顔" },
+  { id: "windmill",    name: "風車" },
+  { id: "crab",        name: "カニ" },
+  { id: "armet",       name: "兜" },
+  { id: "hikouki",     name: "紙飛行機" },
+  { id: "semi",        name: "セミ" },
+  { id: "damashibune", name: "だまし船" },
+  { id: "crane",       name: "鶴" },
+  { id: "chicken",     name: "にわとり" },
+  { id: "heart",       name: "ハート" },
+  { id: "flower",      name: "花" },
+  { id: "pig",         name: "ブタ" },
+  { id: "yakko",       name: "やっこさん" }
+];
+
+/* 立体形状の作品（3D） */
+var WORKS_3D = [
+  { id: "crane", name: "鶴" }
+];
+
+var indexEl   = document.getElementById("index");
+var index3dEl = document.getElementById("index3d");
+var empty3dEl = document.getElementById("empty3d");
+var detailEl  = document.getElementById("detail");
+var tabsWrap  = document.getElementById("tabsWrap");
+
+/* 3D 作品のハッシュは "3d-" を前置して 2D と区別する */
+function hashOf(work, is3d) { return "#" + (is3d ? "3d-" : "") + work.id; }
+
+function activateTab(tab) {
+  document.querySelectorAll(".tab-btn").forEach(function (b) {
+    var on = b.dataset.tab === tab;
+    b.classList.toggle("active", on);
+    b.setAttribute("aria-selected", on ? "true" : "false");
+    b.tabIndex = on ? 0 : -1;
+  });
+  document.querySelectorAll(".tab-panel").forEach(function (p) {
+    p.classList.toggle("active", p.id === "panel-" + tab);
+  });
+}
+
+document.getElementById("tabs").addEventListener("click", function (e) {
+  var btn = e.target.closest(".tab-btn");
+  if (btn) activateTab(btn.dataset.tab);
+});
+
+/* 左右キーでタブを切り替える */
+document.getElementById("tabs").addEventListener("keydown", function (e) {
+  if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+  var btns = Array.prototype.slice.call(document.querySelectorAll(".tab-btn"));
+  var k = btns.indexOf(document.activeElement);
+  if (k === -1) return;
+  var next = btns[(k + (e.key === "ArrowRight" ? 1 : btns.length - 1)) % btns.length];
+  activateTab(next.dataset.tab);
+  next.focus();
+  e.preventDefault();
+});
+
+/* 一覧：完成形をサムネイルに */
+function renderIndex(el, works, is3d) {
+  el.innerHTML = works.map(function (w) {
+    var src = is3d ? "3d/finished/" + w.id + ".png" : "2d/finished/" + w.id + "_front.png";
+    var alt = w.name + "の完成形";
+    return '<li>' +
+      '<a class="card" href="' + hashOf(w, is3d) + '">' +
+        '<span class="thumb">' +
+          '<img src="' + src + '" alt="' + alt + '" loading="lazy" data-trim>' +
+        '</span>' +
+        '<p class="name">' + w.name + '</p>' +
+      '</a></li>';
+  }).join("");
+}
+
+renderIndex(indexEl, WORKS, false);
+renderIndex(index3dEl, WORKS_3D, true);
+empty3dEl.hidden = WORKS_3D.length > 0;
+
+function trimThumb(img) {
+  var w = img.naturalWidth, h = img.naturalHeight;
+  if (!w || !h) return;
+
+  var src = document.createElement("canvas");
+  src.width = w; src.height = h;
+  var sctx = src.getContext("2d", { willReadFrequently: true });
+  sctx.drawImage(img, 0, 0);
+
+  var data;
+  try {
+    data = sctx.getImageData(0, 0, w, h).data;
+  } catch (e) {
+    return; /* 別オリジンで読めない場合は元画像のまま */
+  }
+
+  /* 背景（白 or 透明）でない画素の外接矩形を求める */
+  var minX = w, minY = h, maxX = -1, maxY = -1;
+  for (var y = 0; y < h; y++) {
+    for (var x = 0; x < w; x++) {
+      var i = (y * w + x) * 4;
+      var a = data[i + 3];
+      if (a < 16) continue;
+      if (data[i] > 244 && data[i + 1] > 244 && data[i + 2] > 244) continue;
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
+  }
+  if (maxX < 0) return; /* 全面が背景 */
+
+  var cw = maxX - minX + 1, ch = maxY - minY + 1;
+
+  /* 面積基準で正規化する*/
+  var TARGET = 1000;
+  var MARGIN = 0.90;
+  var avail  = TARGET * MARGIN;
+
+  var scale = avail / Math.sqrt(cw * ch);
+  scale = Math.min(scale, avail / cw, avail / ch);
+
+  var dw = Math.round(cw * scale), dh = Math.round(ch * scale);
+
+  var out = document.createElement("canvas");
+  out.width = TARGET; out.height = TARGET;
+  var octx = out.getContext("2d");
+  octx.imageSmoothingQuality = "high";
+  octx.drawImage(
+    src, minX, minY, cw, ch,
+    Math.round((TARGET - dw) / 2), Math.round((TARGET - dh) / 2), dw, dh
+  );
+
+  out.className = img.className;
+  out.setAttribute("role", "img");
+  out.setAttribute("aria-label", img.alt);
+  img.replaceWith(out);
+}
+
+Array.prototype.forEach.call(
+  document.querySelectorAll("img[data-trim]"),
+  function (img) {
+    if (img.complete) trimThumb(img);
+    else img.addEventListener("load", function () { trimThumb(img); });
+  }
+);
+
+/* 押すと原寸の画像を開く画像。スマホで指で拡大して読めるようにする */
+function zoomImgHtml(src, alt, attrs) {
+  return '<a class="zoom-link" href="' + src + '" aria-label="' + alt + '（原寸で開く）">' +
+    '<img src="' + src + '" alt="' + alt + '"' + attrs + '></a>';
+}
+
+/* アニメーションのブロック。key は同一ページ内で一意な識別子 */
+function animBlockHtml(key, title) {
+  return '<div class="content-block"><h3>' + title + '</h3>' +
+      '<div class="anim-controls">' +
+        '<button type="button" class="anim-btn" data-play="' + key + '" aria-pressed="false" disabled>▶ 再生する</button>' +
+        '<button type="button" class="anim-btn" data-restart="' + key + '" disabled>↺ 最初から</button>' +
+      '</div>' +
+      '<div class="anim-stage" data-stage="' + key + '">' +
+        '<span class="placeholder">読み込み中…</span>' +
+      '</div>' +
+      '<div class="anim-seek">' +
+        '<input type="range" min="0" max="1000" step="1" value="0" data-seek="' + key + '" aria-label="' + title + 'の再生位置" disabled>' +
+        '<span data-time="' + key + '">0:00 / 0:00</span>' +
+      '</div>' +
+    '</div>';
+}
+
+/* 秒を「分:秒」にする */
+function formatTime(t) {
+  t = Math.max(0, Math.floor(t || 0));
+  return Math.floor(t / 60) + ":" + ("0" + (t % 60)).slice(-2);
+}
+
+/* 動画は細線がにじまないよう2倍の大きさで書き出しているので、半分の大きさで見せる */
+function makeVideo(src, label) {
+  var video = document.createElement("video");
+  video.muted = true;
+  video.playsInline = true;
+  video.setAttribute("playsinline", "");
+  video.preload = "metadata";
+  video.setAttribute("aria-label", label);
+  /* 再生前に1コマ目を出すため、開始位置をわずかにずらす */
+  video.src = src + "#t=0.001";
+  return video;
+}
+
+/* 作品全体のアニメーション：再生・一時停止・最初から・再生位置の移動 */
+function setupAnim(key, src, label) {
+  var stage   = detailEl.querySelector('[data-stage="' + key + '"]');
+  var play    = detailEl.querySelector('[data-play="' + key + '"]');
+  var restart = detailEl.querySelector('[data-restart="' + key + '"]');
+  var seek    = detailEl.querySelector('[data-seek="' + key + '"]');
+  var time    = detailEl.querySelector('[data-time="' + key + '"]');
+  if (!stage || !play) return;
+
+  var video = makeVideo(src, label);
+  var dragging = false;
+
+  function showTime() {
+    var d = video.duration || 0;
+    if (!dragging) seek.value = d ? Math.round(video.currentTime / d * 1000) : 0;
+    time.textContent = formatTime(video.currentTime) + " / " + formatTime(d);
+  }
+  function showButton() {
+    var playing = !video.paused && !video.ended;
+    play.textContent = playing ? "❚❚ 一時停止"
+      : video.ended ? "↻ もう一度再生"
+      : video.currentTime > 0.05 ? "▶ 続きを再生" : "▶ 再生する";
+    play.setAttribute("aria-pressed", playing ? "true" : "false");
+  }
+
+  video.addEventListener("loadedmetadata", function () {
+    video.style.width = Math.round(video.videoWidth / 2) + "px";
+    stage.innerHTML = "";
+    stage.appendChild(video);
+    play.disabled = restart.disabled = seek.disabled = false;
+    showTime();
+  });
+  video.addEventListener("error", function () {
+    stage.innerHTML = '<span class="placeholder">アニメーションを読み込めませんでした</span>';
+  });
+  video.addEventListener("timeupdate", showTime);
+  /* 動画を押しても再生・一時停止できるようにする */
+  video.addEventListener("click", function () { if (!play.disabled) play.click(); });
+  ["play", "pause", "ended", "seeked"].forEach(function (ev) {
+    video.addEventListener(ev, showButton);
+  });
+
+  play.addEventListener("click", function () {
+    if (video.paused || video.ended) {
+      if (video.ended) video.currentTime = 0;
+      video.play().catch(function () {});
+    } else {
+      video.pause();
+    }
+  });
+  restart.addEventListener("click", function () {
+    video.currentTime = 0;
+    video.play().catch(function () {});
+  });
+  seek.addEventListener("input", function () {
+    dragging = true;
+    if (video.duration) video.currentTime = seek.value / 1000 * video.duration;
+    time.textContent = formatTime(video.currentTime) + " / " + formatTime(video.duration);
+  });
+  seek.addEventListener("change", function () { dragging = false; showTime(); });
+}
+
+function renderDetail(works, i, is3d) {
+  var w = works[i], prev = works[i - 1], next = works[i + 1];
+  var base = is3d ? "3d/" : "2d/";
+
+  var html =
+    '<article class="detail">' +
+      '<a class="backlink" href="#">← 一覧へ戻る</a>' +
+      '<h2>' + w.name + (is3d ? '（立体）' : '') + '</h2>';
+
+  /* 展開図は 2D 作品のみ */
+  if (!is3d) {
+    html +=
+      '<div class="content-block"><h3>展開図</h3>' +
+        '<div class="img-wrap cp"><img src="' + base + 'crease_patterns/' + w.id + '.png" alt="' + w.name + 'の展開図"></div>' +
+        '<div class="legend cp-legend">' +
+          '<span class="legend-item"><span class="legend-rule mtn"></span> 山折り</span>' +
+          '<span class="legend-item"><span class="legend-rule val"></span> 谷折り</span>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* 完成形：2D は表裏の 2 枚、3D は立体形状の 1 枚 */
+  html += '<div class="content-block"><h3>完成形</h3>';
+  if (is3d) {
+    html += '<div class="img-wrap"><img src="' + base + 'finished/' + w.id + '.png" alt="' + w.name + 'の完成形（立体）"></div>';
+  } else {
+    html +=
+      '<div class="img-wrap dual">' +
+        '<figure><img src="' + base + 'finished/' + w.id + '_front.png" alt="' + w.name + 'の完成形（表面）"><figcaption>表面</figcaption></figure>' +
+        '<figure><img src="' + base + 'finished/' + w.id + '_back.png" alt="' + w.name + 'の完成形（裏面）"><figcaption>裏面</figcaption></figure>' +
+      '</div>';
+  }
+  html += '</div>';
+
+  html +=
+    '<div class="content-block"><h3>折り順</h3>' +
+      '<div class="img-wrap">' + zoomImgHtml(base + 'steps/' + w.id + '/fold.png', w.name + 'の折り順', '') + '</div>' +
+      '<p class="zoom-hint">画像をタップすると拡大して見られます</p>' +
+      '<div class="legend cp-legend">' +
+        '<span class="legend-item"><span class="legend-swatch front"></span> 表面</span>' +
+        '<span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>' +
+        '<span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>' +
+      '</div>' +
+      '<a class="more-link" href="' + hashOf(w, is3d) + '/steps">工程を詳しく見る →</a>' +
+    '</div>';
+
+  html += animBlockHtml("fold", "折りたたみアニメーション");
+  /* 3D は平面に折りたたんだあと立体に起こす工程を別に見せる */
+  if (is3d) html += animBlockHtml("shape", "立体化アニメーション");
+
+  html +=
+      '<nav class="pager">' +
+        (prev ? '<a href="' + hashOf(prev, is3d) + '">← ' + prev.name + '</a>' : '<span></span>') +
+        (next ? '<a href="' + hashOf(next, is3d) + '">' + next.name + ' →</a>' : '<span></span>') +
+      '</nav>' +
+    '</article>';
+
+  detailEl.innerHTML = html;
+
+  setupAnim("fold", base + 'animations/' + w.id + '_animation.mp4',
+            w.name + 'の折りたたみアニメーション');
+  if (is3d) {
+    setupAnim("shape", base + 'animations/' + w.id + '_3d_animation.mp4',
+              w.name + 'の立体化アニメーション');
+  }
+
+  tabsWrap.style.display = "none";
+}
+
+/* HTML に埋め込む文字列をエスケープする */
+function esc(text) {
+  return String(text).replace(/[&<>"']/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+  });
+}
+
+/* 工程ごとの詳細：steps/{id}/steps.json を読み、工程をカードで並べる */
+function renderSteps(works, i, is3d) {
+  var w = works[i];
+  var dir = (is3d ? "3d/" : "2d/") + "steps/" + w.id + "/";
+  var back = '<a class="backlink" href="' + hashOf(w, is3d) + '">← ' + esc(w.name) + 'に戻る</a>';
+
+  detailEl.innerHTML =
+    '<article class="detail">' + back +
+      '<h2>' + esc(w.name) + (is3d ? '（立体）' : '') + 'の折り方</h2>' +
+      '<div id="stepsBody"><p class="steps-meta">読み込み中…</p></div>' +
+    '</article>';
+  tabsWrap.style.display = "none";
+  var body = document.getElementById("stepsBody");
+
+  /* 折り順がまだない作品は、工程の代わりに準備中の絵を出す */
+  if (w.pending) {
+    body.innerHTML =
+      '<p class="steps-meta">折り順は準備中です。</p>' +
+      '<div class="img-wrap"><img src="' + dir + 'pending.png" alt="準備中"></div>' +
+      '<nav class="pager">' + back + '<span></span></nav>';
+    return;
+  }
+
+  fetch(dir + "steps.json")
+    .then(function (res) {
+      if (!res.ok) throw new Error(res.status);
+      return res.json();
+    })
+    .then(function (data) {
+      /* 表示中に別の作品へ移っていたら描かない */
+      if (document.getElementById("stepsBody") !== body) return;
+      var steps = data.steps;
+      var count = steps.filter(function (s) { return s.n !== null; }).length;
+      body.innerHTML =
+        '<p class="steps-meta">全' + count + '工程</p>' +
+        '<ol class="steps-grid">' + steps.map(function (s, k) {
+          var finish = s.n === null;
+          var alt = finish ? w.name + "のできあがり" : "工程" + s.n + "：" + s.text;
+          return '<li class="step-card' + (finish ? ' finish' : '') + (s.animation ? ' has-anim' : '') + '">' +
+            '<div class="step-figure">' +
+              '<img src="' + dir + esc(s.image) + '" alt="' + esc(alt) + '" loading="lazy" data-still="' + dir + esc(s.image) + '">' +
+            '</div>' +
+            '<div class="step-head">' +
+              (finish ? '' : '<span class="step-num">' + s.n + '</span>') +
+              (finish ? '' : '<span class="step-kind">' + esc(s.label) + '</span>') +
+            '</div>' +
+            '<p class="step-text">' + esc(s.text) + '</p>' +
+            (s.animation
+              ? '<button type="button" class="anim-btn" data-anim="' + dir + esc(s.animation) + '" aria-pressed="false">▶ 動きを見る</button>'
+              : '') +
+          '</li>';
+        }).join("") + '</ol>' +
+        '<div class="content-block"><h3>折り順（全体）</h3>' +
+          '<div class="img-wrap sheet">' + zoomImgHtml(dir + 'fold_text.png', esc(w.name) + 'の折り順（全工程）', ' loading="lazy"') + '</div>' +
+          '<p class="zoom-hint">画像をタップすると拡大して見られます</p>' +
+          '<div class="legend cp-legend">' +
+            '<span class="legend-item"><span class="legend-swatch front"></span> 表面</span>' +
+            '<span class="legend-item"><span class="legend-swatch back"></span> 裏面</span>' +
+            '<span class="legend-item"><span class="legend-swatch line"></span> 折り線</span>' +
+          '</div>' +
+        '</div>' +
+        '<nav class="pager">' + back + '<span></span></nav>';
+    })
+    .catch(function () {
+      if (document.getElementById("stepsBody") !== body) return;
+      body.innerHTML = '<p class="steps-meta">工程のデータを読み込めませんでした。</p>';
+    });
+}
+
+/* 工程カードの「動きを見る」：絵をその工程だけの動画に切り替えて再生する。
+   再生中に押すと一時停止、終わると折り終えた形で止まる */
+function setAnimButton(btn, playing, label) {
+  btn.setAttribute("aria-pressed", playing ? "true" : "false");
+  btn.textContent = label;
+}
+
+detailEl.addEventListener("click", function (e) {
+  var btn = e.target.closest("[data-anim]");
+  /* 動きのある工程は、絵を押してもボタンと同じように再生・一時停止する */
+  var fig = e.target.closest(".step-figure");
+  if (!btn && fig) btn = fig.closest(".step-card").querySelector("[data-anim]:not([disabled])");
+  if (!btn) return;
+  var figure = btn.closest(".step-card").querySelector(".step-figure");
+  var img = figure.querySelector("img");
+  var video = figure.querySelector("video");
+  if (!video) {
+    video = makeVideo(btn.dataset.anim, img.alt + "（動き）");
+    video.preload = "auto";
+    img.hidden = true;
+    figure.appendChild(video);
+    video.addEventListener("play", function () { setAnimButton(btn, true, "❚❚ 一時停止"); });
+    video.addEventListener("pause", function () {
+      setAnimButton(btn, false, video.ended ? "↻ もう一度見る" : "▶ 続きを見る");
+    });
+    video.addEventListener("ended", function () { setAnimButton(btn, false, "↻ もう一度見る"); });
+    video.addEventListener("error", function () {
+      video.remove();
+      img.hidden = false;
+      btn.disabled = true;
+      setAnimButton(btn, false, "動きを読み込めませんでした");
+    });
+  }
+  if (video.paused || video.ended) {
+    if (video.ended) video.currentTime = 0;
+    video.play().catch(function () {});
+  } else {
+    video.pause();
+  }
+});
+
+function findWork(works, id) {
+  for (var k = 0; k < works.length; k++) { if (works[k].id === id) return k; }
+  return -1;
+}
+
+/* 一覧から作品へ移るときのスクロール位置。一覧に戻ったらそこへ戻す */
+var listScrollY = 0;
+var showingList = true;
+
+function route() {
+  /* "#crane" は作品ページ、"#crane/steps" はその工程ごとの詳細 */
+  var parts = location.hash.slice(1).split("/");
+  var hash = parts[0];
+  var is3d = hash.indexOf("3d-") === 0;
+  var works = is3d ? WORKS_3D : WORKS;
+  var i = findWork(works, is3d ? hash.slice(3) : hash);
+
+  if (i === -1) {
+    detailEl.innerHTML = "";
+    tabsWrap.style.display = "";
+    if (!showingList) window.scrollTo(0, listScrollY);
+    showingList = true;
+    return;
+  }
+  if (showingList) listScrollY = window.scrollY;
+  showingList = false;
+  if (parts[1] === "steps") renderSteps(works, i, is3d);
+  else renderDetail(works, i, is3d);
+  activateTab(is3d ? "3d" : "2d");
+  window.scrollTo(0, 0);
+}
+
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>

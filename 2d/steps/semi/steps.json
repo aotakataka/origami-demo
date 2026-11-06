@@ -1,0 +1,83 @@
+{
+ "name": "semi",
+ "steps": [
+  {
+   "n": 1,
+   "label": "谷折り",
+   "text": "半分に折る。",
+   "image": "01.png",
+   "animation": "01.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 2,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "02.png",
+   "animation": "02.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 3,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "03.png",
+   "animation": "03.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 4,
+   "label": "谷折り",
+   "text": "下へ折り下げる。",
+   "image": "04.png",
+   "animation": "04.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 5,
+   "label": "谷折り",
+   "text": "下へ折り下げる。",
+   "image": "05.png",
+   "animation": "05.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 6,
+   "label": "谷折り",
+   "text": "手前の1つだけ、下へ折り下げる。",
+   "image": "06.png",
+   "animation": "06.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 7,
+   "label": "谷折り",
+   "text": "下へ折り下げる。",
+   "image": "07.png",
+   "animation": "07.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 8,
+   "label": "山折り",
+   "text": "後ろへ折る。",
+   "image": "08.png",
+   "animation": "08.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 9,
+   "label": "山折り",
+   "text": "折り目に合わせて後ろへ折る。",
+   "image": "09.png",
+   "animation": "09.mp4",
+   "duration": 1900
+  },
+  {
+   "n": null,
+   "label": "できあがり",
+   "text": "できあがり",
+   "image": "finish.png"
+  }
+ ]
+}

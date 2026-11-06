@@ -1,0 +1,85 @@
+{
+ "name": "damashibune",
+ "steps": [
+  {
+   "n": 1,
+   "label": "折り筋をつける",
+   "text": "半分に折って折り筋をつける。",
+   "image": "01.png"
+  },
+  {
+   "n": 2,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "02.png",
+   "animation": "02.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 3,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "03.png",
+   "animation": "03.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 4,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "04.png"
+  },
+  {
+   "n": 5,
+   "label": "袋折り（両開き）",
+   "text": "袋を開いて左右につぶす。",
+   "image": "05.png",
+   "animation": "05.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 6,
+   "label": "折り筋をつける",
+   "text": "谷折りして折り筋をつける。",
+   "image": "06.png"
+  },
+  {
+   "n": 7,
+   "label": "袋折り（両開き）",
+   "text": "袋を開いて左右につぶす。",
+   "image": "07.png",
+   "animation": "07.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 8,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "08.png",
+   "animation": "08.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 9,
+   "label": "谷折り",
+   "text": "折り目に合わせて折る。",
+   "image": "09.png",
+   "animation": "09.mp4",
+   "duration": 1900
+  },
+  {
+   "n": 10,
+   "label": "山折り",
+   "text": "辺に合わせて後ろへ折る。",
+   "image": "10.png",
+   "animation": "10.mp4",
+   "duration": 1900
+  },
+  {
+   "n": null,
+   "label": "できあがり",
+   "text": "できあがり",
+   "image": "finish.png"
+  }
+ ]
+}
