@@ -2,7 +2,7 @@
  "name": "crane_3d_2wings",
  "meta": {
   "input": "完成形\\crane_3d_2wings.fold",
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "commit": "361a3417f21a09d97eb0b893318c993cc425662b",
   "dirty": false,
   "model": null,
   "rotate": 180,
@@ -125,7 +125,7 @@
   }
  ],
  "source": {
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "commit": "361a3417f21a09d97eb0b893318c993cc425662b",
   "modified": false
  }
 }
