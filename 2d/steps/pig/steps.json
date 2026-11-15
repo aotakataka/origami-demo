@@ -1,10 +1,10 @@
 {
  "name": "pig",
  "meta": {
-  "input": "完成形\\pig.fold",
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "input": "展開図\\pig.opx",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "dirty": false,
-  "model": null,
+  "model": 1,
   "rotate": 0,
   "fold_only": false
  },
@@ -115,7 +115,7 @@
   }
  ],
  "source": {
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "modified": false
  }
 }

@@ -1,10 +1,10 @@
 {
  "name": "armet",
  "meta": {
-  "input": "完成形\\armet.fold",
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "input": "展開図\\armet.opx",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "dirty": false,
-  "model": null,
+  "model": 9,
   "rotate": 180,
   "fold_only": false
  },
@@ -97,7 +97,7 @@
   }
  ],
  "source": {
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "modified": false
  }
 }

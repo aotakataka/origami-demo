@@ -1,10 +1,10 @@
 {
  "name": "hikouki",
  "meta": {
-  "input": "完成形\\hikouki.fold",
-  "commit": "361a3417f21a09d97eb0b893318c993cc425662b",
+  "input": "展開図\\hikouki.opx",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "dirty": false,
-  "model": null,
+  "model": 47,
   "rotate": 0,
   "fold_only": false
  },
@@ -79,7 +79,7 @@
   }
  ],
  "source": {
-  "commit": "361a3417f21a09d97eb0b893318c993cc425662b",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "modified": false
  }
 }

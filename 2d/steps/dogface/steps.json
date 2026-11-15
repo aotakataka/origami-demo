@@ -1,10 +1,10 @@
 {
  "name": "dogface",
  "meta": {
-  "input": "完成形\\dogface.fold",
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "input": "展開図\\dogface.opx",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "dirty": false,
-  "model": null,
+  "model": 2,
   "rotate": 0,
   "fold_only": false
  },
@@ -20,7 +20,7 @@
   {
    "n": 2,
    "label": "谷折り",
-   "text": "左下へ折る。",
+   "text": "右下へ折る。",
    "image": "02.png",
    "animation": "02.mp4",
    "duration": 1900
@@ -28,7 +28,7 @@
   {
    "n": 3,
    "label": "谷折り",
-   "text": "右下へ折る。",
+   "text": "左下へ折る。",
    "image": "03.png",
    "animation": "03.mp4",
    "duration": 1900
@@ -49,7 +49,7 @@
   }
  ],
  "source": {
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "modified": false
  }
 }

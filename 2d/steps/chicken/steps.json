@@ -1,10 +1,10 @@
 {
  "name": "chicken",
  "meta": {
-  "input": "完成形\\chicken.fold",
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "input": "展開図\\chicken.opx",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "dirty": false,
-  "model": null,
+  "model": 2,
   "rotate": 0,
   "fold_only": false
  },
@@ -49,8 +49,8 @@
   },
   {
    "n": 6,
-   "label": "山折り",
-   "text": "後ろへ折る。",
+   "label": "谷折り",
+   "text": "右上へ折る。",
    "image": "06.png",
    "animation": "06.mp4",
    "duration": 1900
@@ -64,6 +64,14 @@
    "duration": 1900
   },
   {
+   "n": 8,
+   "label": "裏返す",
+   "text": "裏返す。",
+   "image": "08.png",
+   "animation": "08.mp4",
+   "duration": 1400
+  },
+  {
    "n": null,
    "label": "できあがり",
    "text": "できあがり",
@@ -71,7 +79,7 @@
   }
  ],
  "source": {
-  "commit": "654680662fe731179715652ee2ce238f80a3f5e2",
+  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
   "modified": false
  }
 }
