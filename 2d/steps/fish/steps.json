@@ -2,7 +2,7 @@
  "name": "fish",
  "meta": {
   "input": "展開図\\fish.opx",
-  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
+  "commit": "9e54d59be7fa1d10543cebf212e70a3d9ed59508",
   "dirty": false,
   "model": 1,
   "rotate": 0,
@@ -12,7 +12,7 @@
   {
    "n": 1,
    "label": "つまみ折り",
-   "text": "つまみ折りにする。",
+   "text": "つまんで折りたたむ。",
    "image": "01.png",
    "animation": "01.mp4",
    "duration": 1900
@@ -20,7 +20,7 @@
   {
    "n": 2,
    "label": "つまみ折り",
-   "text": "つまみ折りにする。",
+   "text": "つまんで折りたたむ。",
    "image": "02.png",
    "animation": "02.mp4",
    "duration": 1900
@@ -65,7 +65,7 @@
   }
  ],
  "source": {
-  "commit": "0908a14c4744e9f6b036ec601644b514374b07fe",
+  "commit": "9e54d59be7fa1d10543cebf212e70a3d9ed59508",
   "modified": false
  }
 }
